@@ -26,6 +26,15 @@ TYPE
               bando: string;
               END;
 
+    armas = RECORD
+            nombre_arma: string;
+            clase_arma: string;
+            pais_de_origen: string;
+            info_arma: string;
+            END;
+
+
+
 VAR
    archivo_informacion: FILE OF informacion;
    registro_informacion: informacion;
@@ -33,6 +42,8 @@ VAR
    registro_batallas: batallas;
    archivo_lideres: FILE OF lideres;
    registro_lideres: lideres;
+   archivo_armas: FILE OF armas;
+   registro_armas: armas;
 
 PROCEDURE crea_archivo_informacion;
  BEGIN
@@ -50,6 +61,12 @@ PROCEDURE crea_archivo_lideres;
  BEGIN
  rewrite(archivo_lideres);
  close(archivo_lideres);
+ END;
+
+PROCEDURE crea_archivo_armas;
+ BEGIN
+ rewrite(archivo_armas);
+ close(archivo_armas);
  END;
 
 FUNCTION valida_anio(): integer;
@@ -213,6 +230,128 @@ VAR
    close(archivo_lideres);
    END;
 
+FUNCTION verificar_estado_archivo_armas(): boolean;
+VAR
+ f: boolean;
+ BEGIN
+ IF filesize(archivo_armas) = 0 THEN
+  f:= true;
+ IF f = true THEN
+  verificar_estado_archivo_armas:= true
+ ELSE
+  verificar_estado_archivo_armas:= false;
+
+ END;
+
+FUNCTION existe_arma(arma: string): boolean;
+VAR
+ f: boolean;
+ BEGIN
+ f:= false;
+ REPEAT
+ seek(archivo_armas,filesize(archivo_armas) - 1);
+ read(archivo_armas,registro_armas);
+ IF arma = registro_armas.nombre_arma THEN
+  f:=  true;
+ UNTIL eof(archivo_armas) OR (f = true);
+ IF f = true THEN
+  existe_arma:= true
+ ELSE
+  existe_arma:= false;
+ END;
+
+PROCEDURE carga_de_armas;
+VAR
+ arma,opcion: string;
+ BEGIN
+ reset(archivo_armas);
+ REPEAT
+ clrscr;
+ textcolor(lightcyan);
+ IF verificar_estado_archivo_armas = true THEN
+  BEGIN
+  writeln('---------------------------------------------');
+  writeln('/////////////////////////////////////////////');
+  writeln('---------------------------------------------');
+  write('>>> Ingrese nombre del arma: ');
+  readln(registro_armas.nombre_arma);
+  writeln();
+  write('>>> Ingrese clase de arma: ');
+  readln(registro_armas.clase_arma);
+  writeln();
+  write('>>> Ingrese pais de origen: ');
+  readln(registro_armas.pais_de_origen);
+  writeln();
+  write('>>> Ingrese informacion adicional del arma: ');
+  readln(registro_armas.info_arma);
+  writeln();
+  writeln('--------------------------------------------');
+  writeln('////////////////////////////////////////////');
+  writeln('--------------------------------------------');
+  seek(archivo_armas,filesize(archivo_armas));
+  write(archivo_armas,registro_armas);
+  writeln();
+  writeln('==================================================');
+  writeln('*** Se han registrado los datos existosamente! ***');
+  writeln('==================================================');
+  END
+ ELSE
+  BEGIN
+  writeln('---------------------------------------------');
+  writeln('/////////////////////////////////////////////');
+  writeln('---------------------------------------------');
+  write('>>> Ingrese nombre del arma: ');
+  readln(arma);
+  IF existe_arma(arma) = true THEN
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('=================================');
+   writeln('x Ya esta cargado en el archivo x');
+   writeln('=================================');
+   END
+  ELSE
+   BEGIN
+   registro_armas.nombre_arma:= arma;
+   write('>>> Ingrese clase de arma: ');
+   readln(registro_armas.clase_arma);
+   writeln();
+   write('>>> Ingrese pais de origen: ');
+   readln(registro_armas.pais_de_origen);
+   writeln();
+   write('>>> Ingrese informacion adicional del arma: ');
+   readln(registro_armas.info_arma);
+   writeln();
+   writeln('--------------------------------------------');
+   writeln('////////////////////////////////////////////');
+   writeln('--------------------------------------------');
+   seek(archivo_armas,filesize(archivo_armas));
+   write(archivo_armas,registro_armas);
+   writeln();
+   writeln('==================================================');
+   writeln('*** Se han registrado los datos existosamente! ***');
+   writeln('==================================================');
+   END;
+ END;
+ writeln();
+  REPEAT
+   textcolor(lightgreen);
+   write('>>> Desea volver a ingresar otra arma[si/no]?: ');
+   readln(opcion);
+   IF (opcion <> 'si') AND (opcion <> 'no') THEN
+   BEGIN
+    textcolor(lightred);
+    writeln();
+    writeln('|////////////////////////////////////////|');
+    writeln('|Ingrese una respuesta valida. Por favor.|');
+    writeln('|////////////////////////////////////////|');
+    writeln();
+    END;
+  UNTIL (opcion = 'si') OR (opcion = 'no');
+ UNTIL (opcion = 'no');
+ close(archivo_armas);
+ END;
+
 PROCEDURE carga_de_informacion;
 VAR
   opcion: integer;
@@ -224,12 +363,11 @@ VAR
    writeln('2. Cargar sobre las batallas iconicas');
    writeln('3. Cargar sobre los lideres');
    writeln('4. Cargar sobre las armas');
-   writeln('5. Cargar sobre el ocultismo Nazi');
-   writeln('6. Cargar tabla cronologica de la contienda');
-   writeln('7. Cargar archivo del Holocausto');
-   writeln('8. Cargar archivo de las Wanderwaffe');
-   writeln('9. Cargar archivo trivia');
-   writeln('10. Regresar al menu del desarollador.');
+   writeln('5. Cargar tabla cronologica de la contienda');
+   writeln('6. Cargar archivo del Holocausto');
+   writeln('7. Cargar archivo de las Wanderwaffe');
+   writeln('8. Cargar archivo trivia');
+   writeln('9. Regresar al menu del desarollador.');
    writeln();
    writeln('-----------------------------------------------------------');
    write('Seleccione una opcion: ');
@@ -248,6 +386,8 @@ VAR
           carga_informacion_lideres;
           END;
         4:BEGIN
+          clrscr;
+          carga_de_armas;
           END;
         5:BEGIN
           END;
@@ -259,8 +399,6 @@ VAR
           END;
         9:BEGIN
           END;
-        10:BEGIN
-           END;
    END;
   UNTIL (opcion = 10);
   END;
@@ -381,6 +519,146 @@ VAR
    UNTIL (opcion = 4);
    END;
 
+PROCEDURE portada_ocultismo_nazi;
+ BEGIN
+ gotoxy(whereX,whereY + 12);
+ writeln();
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMMMMMNOolcl0MMMMMMMMMMKdlc:xWMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMMMMWd.   cXMMMMMMMMMK,   .OMMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMMMMO.   ,0MMMMMMMMMNc   .dWMMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMMMX;   .xWMMMMMMMMWd.   cNMMMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMMWl    lNWNNWMMMMMO.   ,0WNXWMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMWx.      |dWMMMMX|;      |cKMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMM0,        ,KMMMMNl        .xWMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMX:        .kMMMMWx.        cNMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMXxdxx,    oWMMMMWOoxkc    ,KMMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMMMWd.   :XMMMMMMMMM0,   .kMMMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMMMO.    0MMMMMMMMMNc    oWMMMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMMK;   .xWMMMMMMMMWd.   :XMMMMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMNl... dNMMMMMMMMMO ..:0MMMMMMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMNkdk0XWMMMMMMMMMW0dxOKNMMMMMMMMMMMMMMMM ');
+ gotoxy(whereX +25,whereY);
+ writeln('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM ');
+ writeln();
+ gotoxy(whereX +13,whereY);
+ writeln('||======================================================================||');
+ gotoxy(whereX +13,whereY);
+ writeln('||                 ,,   ,                                               ||');
+ gotoxy(whereX +13,whereY);
+ writeln('||                ||  ||   *                                           *||');
+ gotoxy(whereX +13,whereY);
+ writeln('|| /\\  _-_ \\ \\ || =||= \\  _-_, \\/\\/\\   /\\     \\/\\  < \, /\\ \\||');
+ gotoxy(whereX +13,whereY);
+ writeln('|||| || ||   || || ||  ||  || ||_.  || || || || ||    || ||  /-||  /  ||||');
+ gotoxy(whereX +13,whereY);
+ writeln('|||| || ||   || || ||  ||  ||  ~ || || || || || ||    || || (( || /\\ ||||');
+ gotoxy(whereX +13,whereY);
+ writeln('||\\,/  \\,/ \\/\\ \\  \\, \\ ,-_-  \\ \\ \\ \\,/     \\ \\  \/\\  || \\||');
+ gotoxy(whereX +13,whereY);
+ writeln('||                                                                /     ||');
+ gotoxy(whereX +13,whereY);
+ writeln('||                                                               (,     ||');
+ gotoxy(whereX +13,whereY);
+ writeln('||======================================================================||');
+ END;
+
+PROCEDURE pagina_2_ocultismo_nazi;
+ BEGIN
+  gotoxy(whereX + 20,whereY);
+  writeln();
+  writeln('======================================================================================================');
+  writeln('|////////////////////////////////////////OCULTISMO NAZI//////////////////////////////////////////////|');
+  writeln('|====================================================================================================|');
+  writeln('|                                                                                                    |');
+  writeln('| El ocultismo nazi es un termino que se refiere a las creencias esotericas y practicas misticas que |');
+  writeln('|       influyeron en algunos miembros del Partido Nacionalsocialista Obrero Aleman (NSDAP)          |');
+  writeln('|                                      y sus politicas.                                              |');
+  writeln('|                                                                                                    |');
+  writeln('|----------------------------------------------------------------------------------------------------|');
+  writeln('| Detalles:                                                                                          |');
+  writeln('|----------------------------------------------------------------------------------------------------|');
+  writeln('| 1. Raices Esotericas y Misticas                                                                    |');
+  writeln('|                                                                                                    |');
+  writeln('|  * Ariosofia: Un movimiento esoterico que mezclaba ideas nacionalistas y racistas con creencias    |');
+  writeln('|    ocultistas. Figura prominente fue Guido von List, cuyos escritos influyeron en el pensamiento   |');
+  writeln('|    nazi sobre la raza aria.                                                                        |');
+  writeln('|                                                                                                    |');
+  writeln('|  * Sociedad Thule: Una sociedad secreta alemana fundada en 1918, que combinaba el                  |');
+  writeln('|    nacionalismo con el misticismo germánico. Muchos de sus miembros, como Rudolf Hess,             |');
+  writeln('|    eventualmente se unieron al NSDAP.                                                              |');
+  writeln('|                                                                                                    |');
+  writeln('|----------------------------------------------------------------------------------------------------|');
+  writeln('| 2. Adolf Hitler y el Ocultismo                                                                     |');
+  writeln('|                                                                                                    |');
+  writeln('|  * Aunque Hitler no era conocido por ser un ocultista activo, estaba rodeado de individuos que     |');
+  writeln('|    tenían fuertes inclinaciones esotéricas. Heinrich Himmler, jefe de las SS, es el ejemplo        |');
+  writeln('|    más notable.                                                                                    |');
+  writeln('|                                                                                                    |');
+  writeln('|----------------------------------------------------------------------------------------------------|');
+  writeln('======================================================================================================');
+  writeln('|////////////////////////////////////////////////////////////////////////////////////////////////////|');
+  writeln('======================================================================================================');
+ END;
+
+PROCEDURE ocultismo_nazi;
+VAR
+ atras_adelante:string;
+ BEGIN
+ REPEAT
+ clrscr;
+ portada_ocultismo_nazi;
+ writeln();
+ writeln();
+ gotoxy(whereX +  40,whereY);
+ writeln('|---------------|');
+ gotoxy(whereX +  40,whereY);
+ writeln('| ===> ADELANTE |');
+ gotoxy(whereX +  40,whereY);
+ writeln('-----------------');
+ gotoxy(whereX +  40,whereY);
+ writeln('| ENTER - SALIR |');
+ gotoxy(whereX +  40,whereY);
+ writeln('-----------------');
+ atras_adelante:= readkey;
+ IF atras_adelante <> #13 THEN
+ BEGIN
+  REPEAT
+  clrscr;
+  pagina_2_ocultismo_nazi;
+  writeln();
+  writeln();
+  gotoxy(whereX +  40,whereY);
+  writeln('|---------------|');
+  gotoxy(whereX +  40,whereY);
+  writeln('|  <== ATRAS    |');
+  gotoxy(whereX +  40,whereY);
+  writeln('-----------------');
+  gotoxy(whereX +  40,whereY);
+  writeln('| ENTER - SALIR |');
+  gotoxy(whereX +  40,whereY);
+  writeln('-----------------');
+  atras_adelante:= readkey;
+  UNTIL (atras_adelante = #75)  OR (atras_adelante = #13);
+ END;
+ UNTIL (atras_adelante = #13);
+ END;
+
 PROCEDURE menu_principal;
 VAR
    opcion: integer;
@@ -419,6 +697,8 @@ VAR
         5:BEGIN
           END;
         6:BEGIN
+          clrscr;
+          ocultismo_nazi;
           END;
         7:BEGIN
           END;
@@ -433,12 +713,14 @@ VAR
    END;
 
 BEGIN
-assign(archivo_informacion,'C:\Users\JULIO\Desktop\SOFTWARE PROJECTS\Proyectos Personales\3. World War II Enciclopedia\archivo_informacion.dat');
-assign(archivo_batallas,'C:\Users\JULIO\Desktop\SOFTWARE PROJECTS\Proyectos Personales\3. World War II Enciclopedia\archivo_batallas.dat');
-assign(archivo_lideres,'C:\Users\JULIO\Desktop\SOFTWARE PROJECTS\Proyectos Personales\3. World War II Enciclopedia\archivo_lideres.dat');
+assign(archivo_informacion,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_informacion.dat');
+assign(archivo_batallas,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_batallas.dat');
+assign(archivo_lideres,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_lideres.dat');
+assign(archivo_armas,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_armas.dat');
 crea_archivo_informacion;
 crea_archivo_batallas;
 crea_archivo_lideres;
+crea_archivo_armas;
 menu_principal;
 readkey;
 END.
