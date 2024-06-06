@@ -551,7 +551,6 @@ FUNCTION verifica_estado_archivo_informacion(): boolean;
   verifica_estado_archivo_informacion:= false;
  END;
 
-
 PROCEDURE muestra_eventos_de_ese_anio(anio: integer);
  BEGIN
   WHILE NOT eof(archivo_informacion) DO
@@ -612,6 +611,99 @@ VAR
    UNTIL (opcion = 'no');
    END;
   close(archivo_informacion);
+ END;
+
+FUNCTION verifica_estado_archivo_batallas(): boolean;
+ BEGIN
+ reset(archivo_batallas);
+ IF filesize(archivo_batallas) = 0 THEN
+  verifica_estado_archivo_batallas:= true
+ ELSE
+  verifica_estado_archivo_batallas:= false;
+ close(archivo_batallas);
+ END;
+
+FUNCTION muestra_batalla(batalla: string): boolean;
+VAR
+ f: boolean;
+ BEGIN
+  f:= false;
+  REPEAT
+   read(archivo_batallas,registro_batallas);
+   IF batalla = registro_batallas.titulo THEN
+    f:= true;
+  UNTIL eof(archivo_batallas) OR (f = true);
+  IF f = true THEN
+   muestra_batalla:= true
+  ELSE
+   muestra_batalla:= false;
+
+ END;
+
+PROCEDURE ver_batallas_iconicas;
+VAR
+ batalla,opcion: string;
+ BEGIN
+ IF verifica_estado_archivo_batallas = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln();
+  writeln('===========================================================');
+  writeln('X Aun no hay registros cargados en el archivo de batallas X');
+  writeln('===========================================================');
+  delay(3000);
+  END
+ ELSE
+  BEGIN
+   REPEAT
+   reset(archivo_batallas);
+   clrscr;
+   textcolor(cyan);
+   writeln('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-');
+   writeln('///////////////////////////////////////////////////////////////////////////////////////');
+   writeln('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-');
+   write('>>> Ingrese nombre de alguna batalla de la Segunda Guerra Mundial: ');
+   readln(batalla);
+   writeln();
+   IF muestra_batalla(batalla) = true THEN
+   BEGIN
+   writeln();
+   writeln('Batalla: ',registro_batallas.titulo);
+   writeln('Anio: ',registro_batallas.anio);
+   writeln('Victoria: ',registro_batallas.victoria);
+   writeln('Informacion: ',registro_batallas.texto);
+   writeln();
+   writeln('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-');
+   writeln('///////////////////////////////////////////////////////////////////////////////////////');
+   writeln('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-');
+   writeln();
+  END
+  ELSE
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('=========================');
+   writeln('X No existe esa batalla X');
+   writeln('=========================');
+   writeln();
+   END;
+    REPEAT
+     textcolor(lightgreen);
+     write('>>> Desea volver a ingresar otra batalla[si/no]?: ');
+     readln(opcion);
+      IF (opcion <> 'si') AND (opcion <> 'no') THEN
+       BEGIN
+       textcolor(lightred);
+       writeln();
+       writeln('|////////////////////////////////////////|');
+       writeln('|Ingrese una respuesta valida. Por favor.|');
+       writeln('|////////////////////////////////////////|');
+       writeln();
+       END;
+    UNTIL (opcion = 'si') OR (opcion = 'no');
+   UNTIL (opcion = 'no');
+   close(archivo_batallas);
+  END;
  END;
 
 PROCEDURE portada_ocultismo_nazi;
@@ -788,6 +880,8 @@ VAR
           ver_enciclopedia_segunda_guerra_mundial;
           END;
         2:BEGIN
+          clrscr;
+          ver_batallas_iconicas;
           END;
         3:BEGIN
           END;
