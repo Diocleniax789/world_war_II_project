@@ -424,7 +424,7 @@ VAR
         9:BEGIN
           END;
    END;
-  UNTIL (opcion = 10);
+  UNTIL (opcion = 9);
   END;
 
 PROCEDURE baja_informacion;
@@ -542,6 +542,56 @@ VAR
    END;
    UNTIL (opcion = 4);
    END;
+
+PROCEDURE muestra_eventos_de_ese_anio(anio: integer);
+ BEGIN
+  WHILE NOT eof(archivo_informacion) DO
+   BEGIN
+   read(archivo_informacion,registro_informacion);
+   IF anio = registro_informacion.anio THEN
+    BEGIN
+    writeln(registro_informacion.titulo);
+    writeln(registro_informacion.texto);
+    writeln(registro_informacion.bandos_enfrentados);
+    writeln();
+    writeln('======================================');
+    END;
+   END;
+ END;
+
+PROCEDURE ver_enciclopedia_segunda_guerra_mundial;
+VAR
+ opcion: string;
+ anio:integer;
+ BEGIN
+  reset(archivo_informacion);
+  REPEAT
+   clrscr;
+   textcolor(lightgreen);
+   anio:= valida_anio();
+   writeln();
+   writeln('===============================================================');
+   writeln('///////////////////////////',anio,'////////////////////////////');
+   writeln('===============================================================');
+   muestra_eventos_de_ese_anio(anio);
+   writeln();
+   REPEAT
+    textcolor(lightgreen);
+    write('>>> Desea volver a ingresar otra arma[si/no]?: ');
+    readln(opcion);
+     IF (opcion <> 'si') AND (opcion <> 'no') THEN
+      BEGIN
+      textcolor(lightred);
+      writeln();
+      writeln('|////////////////////////////////////////|');
+      writeln('|Ingrese una respuesta valida. Por favor.|');
+      writeln('|////////////////////////////////////////|');
+      writeln();
+      END;
+   UNTIL (opcion = 'si') OR (opcion = 'no');
+  UNTIL (opcion = 'no');
+  close(archivo_informacion);
+ END;
 
 PROCEDURE portada_ocultismo_nazi;
  BEGIN
@@ -711,6 +761,8 @@ VAR
           menu_desarrollador;
           END;
         1:BEGIN
+          clrscr;
+          ver_enciclopedia_segunda_guerra_mundial;
           END;
         2:BEGIN
           END;
