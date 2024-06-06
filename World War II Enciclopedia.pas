@@ -4,6 +4,7 @@ PROGRAM world_war_II_enciclopedia;
 USES crt;
 
 TYPE
+
     informacion = RECORD
                   anio: integer;
                   titulo: string;
@@ -32,8 +33,6 @@ TYPE
             pais_de_origen: string;
             info_arma: string;
             END;
-
-
 
 VAR
    archivo_informacion: FILE OF informacion;
@@ -94,6 +93,30 @@ VAR
  valida_anio:= anio;
  END;
 
+PROCEDURE orderna_archivo_informacion_por_anio;
+VAR
+ i,j: integer;
+ raux: informacion;
+ BEGIN
+ FOR i:= 0 TO filesize(archivo_informacion) - 2 DO
+  BEGIN
+   FOR j:= i + 1 TO filesize(archivo_informacion) - 1 DO
+    BEGIN
+    seek(archivo_informacion,i);
+    read(archivo_informacion,registro_informacion);
+    seek(archivo_informacion,j);
+    read(archivo_informacion,raux);
+    IF registro_informacion.anio > raux.anio THEN
+     BEGIN
+     seek(archivo_informacion,i);
+     write(archivo_informacion,raux);
+     seek(archivo_informacion,j);
+     write(archivo_informacion,registro_informacion);
+     END;
+    END;
+  END;
+ END;
+
 PROCEDURE carga_crea_enciclopedia;
 VAR
  opcion: string;
@@ -134,6 +157,7 @@ VAR
   END;
  UNTIL (opcion = 'si') OR (opcion = 'no');
  UNTIL (opcion = 'no');
+ orderna_archivo_informacion_por_anio;
  close(archivo_informacion);
  END;
 
