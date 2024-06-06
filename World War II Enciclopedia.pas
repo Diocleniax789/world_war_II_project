@@ -543,6 +543,15 @@ VAR
    UNTIL (opcion = 4);
    END;
 
+FUNCTION verifica_estado_archivo_informacion(): boolean;
+ BEGIN
+ IF filesize(archivo_informacion) = 0 THEN
+  verifica_estado_archivo_informacion:= true
+ ELSE
+  verifica_estado_archivo_informacion:= false;
+ END;
+
+
 PROCEDURE muestra_eventos_de_ese_anio(anio: integer);
  BEGIN
   WHILE NOT eof(archivo_informacion) DO
@@ -554,7 +563,7 @@ PROCEDURE muestra_eventos_de_ese_anio(anio: integer);
     writeln(registro_informacion.texto);
     writeln(registro_informacion.bandos_enfrentados);
     writeln();
-    writeln('======================================');
+    writeln('====================================================================');
     END;
    END;
  END;
@@ -565,31 +574,43 @@ VAR
  anio:integer;
  BEGIN
   reset(archivo_informacion);
-  REPEAT
-   clrscr;
-   textcolor(lightgreen);
-   anio:= valida_anio();
+  IF verifica_estado_archivo_informacion = true THEN
+   BEGIN
+   textcolor(lightred);
    writeln();
-   writeln('===============================================================');
-   writeln('///////////////////////////',anio,'////////////////////////////');
-   writeln('===============================================================');
-   muestra_eventos_de_ese_anio(anio);
-   writeln();
+   writeln('==============================================================');
+   writeln('X Aun no hay registros cargados en el archivo de informacion X');
+   writeln('==============================================================');
+   delay(3000);
+   END
+  ELSE
+   BEGIN
    REPEAT
+    clrscr;
     textcolor(lightgreen);
-    write('>>> Desea volver a ingresar otra arma[si/no]?: ');
-    readln(opcion);
-     IF (opcion <> 'si') AND (opcion <> 'no') THEN
-      BEGIN
-      textcolor(lightred);
-      writeln();
-      writeln('|////////////////////////////////////////|');
-      writeln('|Ingrese una respuesta valida. Por favor.|');
-      writeln('|////////////////////////////////////////|');
-      writeln();
-      END;
-   UNTIL (opcion = 'si') OR (opcion = 'no');
-  UNTIL (opcion = 'no');
+    anio:= valida_anio();
+    writeln();
+    writeln('====================================================================');
+    writeln('///////////////////////////',anio,'/////////////////////////////////');
+    writeln('====================================================================');
+    muestra_eventos_de_ese_anio(anio);
+    writeln();
+    REPEAT
+     textcolor(lightgreen);
+     write('>>> Desea volver a ingresar otra arma[si/no]?: ');
+     readln(opcion);
+      IF (opcion <> 'si') AND (opcion <> 'no') THEN
+       BEGIN
+       textcolor(lightred);
+       writeln();
+       writeln('|////////////////////////////////////////|');
+       writeln('|Ingrese una respuesta valida. Por favor.|');
+       writeln('|////////////////////////////////////////|');
+       writeln();
+       END;
+    UNTIL (opcion = 'si') OR (opcion = 'no');
+   UNTIL (opcion = 'no');
+   END;
   close(archivo_informacion);
  END;
 
@@ -695,6 +716,7 @@ VAR
  atras_adelante:string;
  BEGIN
  REPEAT
+ textcolor(lightred);
  clrscr;
  portada_ocultismo_nazi;
  writeln();
@@ -738,6 +760,7 @@ VAR
    opcion: integer;
    BEGIN
    REPEAT
+   textcolor(lightgreen);
    clrscr;
    writeln('0. Opcion para el desarrollador');
    writeln('1. Ver enciclopedia de la Segunda Guerra Mundial');
