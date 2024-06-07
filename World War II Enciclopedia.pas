@@ -265,7 +265,6 @@ VAR
   verificar_estado_archivo_armas:= true
  ELSE
   verificar_estado_archivo_armas:= false;
-
  END;
 
 FUNCTION existe_arma(arma: string): boolean;
@@ -383,19 +382,43 @@ VAR
   BEGIN
   REPEAT
    clrscr;
-   textcolor(brown);
-   writeln('1. Cargar y crear enciclopedia de la Segunda Guerra Mundial');
-   writeln('2. Cargar sobre las batallas iconicas');
-   writeln('3. Cargar sobre los lideres');
-   writeln('4. Cargar sobre las armas');
-   writeln('5. Cargar tabla cronologica de la contienda');
-   writeln('6. Cargar archivo del Holocausto');
-   writeln('7. Cargar archivo de las Wanderwaffe');
-   writeln('8. Cargar archivo trivia');
-   writeln('9. Regresar al menu del desarollador.');
+   textcolor(lightgreen);
+   writeln('=====================================================');
+   writeln('||                         ____                    ||');
+   writeln('||  ____  _____  _______  / ___\ _____     ______  ||');
+   writeln('|| / ___\ \__  \ \_  __ \/ /_/  >\__  \   /  ___/  ||');
+   writeln('|| \  \___  / __ \_|  | \/\___  /  / __ \_ \___ \  ||');
+   writeln('||  \___  >(____  /|__|  /_____/  (____  //____  > ||');
+   writeln('||      \/      \/                     \/      \/  ||');
+   writeln('||                                                 ||');
+   writeln('=====================================================');
    writeln();
-   writeln('-----------------------------------------------------------');
-   write('Seleccione una opcion: ');
+   textcolor(lightcyan);
+   writeln('=================');
+   writeln('* MENU DE ALTAS *');
+   writeln('=================');
+   writeln();
+   writeln('----------------------------------------------------------------');
+   writeln('|1| Cargar y crear enciclopedia de la Segunda Guerra Mundial |1|');
+   writeln('----------------------------------------------------------------');
+   writeln('|2|           Cargar sobre las batallas iconicas             |2|');
+   writeln('----------------------------------------------------------------');
+   writeln('|3|              Cargar sobre los lideres                    |3|');
+   writeln('----------------------------------------------------------------');
+   writeln('|4|               Cargar sobre las armas                     |4|');
+   writeln('----------------------------------------------------------------');
+   writeln('|5|            Cargar archivo del Holocausto                 |5|');
+   writeln('----------------------------------------------------------------');
+   writeln('|6|          Cargar archivo de las Wanderwaffe               |6|');
+   writeln('----------------------------------------------------------------');
+   writeln('|7|               Cargar archivo trivia                      |7|');
+   writeln('----------------------------------------------------------------');
+   writeln('|8|         Regresar al menu del desarollador                |8|');
+   writeln('----------------------------------------------------------------');
+   writeln();
+   textcolor(lightmagenta);
+   writeln('----------------------------------------------------------------');
+   write('Seleccione una opcion(teclas 1 al 8): ');
    readln(opcion);
    CASE opcion OF
         1:BEGIN
@@ -420,28 +443,23 @@ VAR
           END;
         7:BEGIN
           END;
-        8:BEGIN
-          END;
-        9:BEGIN
-          END;
    END;
-  UNTIL (opcion = 9);
+  UNTIL (opcion = 8);
   END;
 
-PROCEDURE baja_informacion;
+PROCEDURE Modifica_informacion;
 VAR
   opcion: integer;
   BEGIN
   REPEAT
-   clrscr;
-   writeln('1. Baja sobre las batallas iconicas');
-   writeln('2. Baja sobre los lideres');
-   writeln('3. Baja sobre las armas');
-   writeln('4. Baja sobre el ocultismo Nazi');
-   writeln('5. Baja tabla cronologica de la contienda');
-   writeln('6. Baja archivo del Holocausto');
-   writeln('7. Baja archivo de las Wanderwaffe');
-   writeln('8. Baja archivo trivia');
+   writeln('1. Modificar enciclopedia de la Segunda Guerra Mundial');
+   writeln('2. Modificar sobre las batallas iconicas');
+   writeln('3. Modificar sobre los lideres');
+   writeln('4. Modificar sobre las armas');
+   writeln('5. Modificar sobre el ocultismo Nazi');
+   writeln('6. Modificar archivo del Holocausto');
+   writeln('7. Modificar archivo de las Wanderwaffe');
+   writeln('8. Modificar archivo trivia');
    writeln('9. Regresar al menu del desarollador.');
    writeln();
    writeln('-----------------------------------------------------------');
@@ -468,22 +486,20 @@ VAR
   UNTIL (opcion = 9);
   END;
 
-
-PROCEDURE Modifica_informacion;
+PROCEDURE baja_informacion;
 VAR
   opcion: integer;
   BEGIN
   REPEAT
-   writeln('1. Modificar enciclopedia de la Segunda Guerra Mundial');
-   writeln('2. Modificar sobre las batallas iconicas');
-   writeln('3. Modificar sobre los lideres');
-   writeln('4. Modificar sobre las armas');
-   writeln('5. Modificar sobre el ocultismo Nazi');
-   writeln('6. Modificar tabla cronologica de la contienda');
-   writeln('7. Modificar archivo del Holocausto');
-   writeln('8. Modificar archivo de las Wanderwaffe');
-   writeln('9. Modificar archivo trivia');
-   writeln('10. Regresar al menu del desarollador.');
+   clrscr;
+   writeln('1. Baja sobre las batallas iconicas');
+   writeln('2. Baja sobre los lideres');
+   writeln('3. Baja sobre las armas');
+   writeln('4. Baja sobre el ocultismo Nazi');
+   writeln('5. Baja archivo del Holocausto');
+   writeln('6. Baja archivo de las Wanderwaffe');
+   writeln('7. Baja archivo trivia');
+   writeln('8. Regresar al menu del desarollador.');
    writeln();
    writeln('-----------------------------------------------------------');
    write('Seleccione una opcion: ');
@@ -503,14 +519,8 @@ VAR
           END;
         7:BEGIN
           END;
-        8:BEGIN
-          END;
-        9:BEGIN
-          END;
-        10:BEGIN
-           END;
    END;
-  UNTIL (opcion = 10);
+  UNTIL (opcion = 8);
   END;
 
 PROCEDURE menu_desarrollador;
@@ -519,13 +529,19 @@ VAR
    BEGIN
    REPEAT
    clrscr;
-   writeln('1. Alta de informacion');
-   writeln('2. Baja de informacion');
-   writeln('3. Modificaciones de informacion');
-   writeln('4. Regresar al menu principal');
+   writeln('--------------------------------------');
+   writeln('|1|       Alta de informacion      |1|');
+   writeln('--------------------------------------');
+   writeln('|2|       Baja de informacion      |2|');
+   writeln('--------------------------------------');
+   writeln('|3|  Modificaciones de informacion |3|');
+   writeln('--------------------------------------');
+   writeln('|4|    Regresar al menu principal  |4|');
+   writeln('--------------------------------------');
    writeln();
-   writeln('--------------------------------');
-   writeln('Seleccione una opcion: ');
+   textcolor(lightmagenta);
+   writeln('======================================');
+   writeln('Seleccione una opcion(teclas 1 al 4): ');
    readln(opcion);
    CASE opcion OF
         1:BEGIN
