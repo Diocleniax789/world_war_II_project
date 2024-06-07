@@ -210,6 +210,7 @@ VAR
    BEGIN
    reset(archivo_lideres);
    REPEAT
+    clrscr;
     textcolor(green);
     writeln('---------------------------------------');
     writeln('|*|*|*|*|*|*|*|*|*|*|*|*|*|*|*|*|*|*|*|');
@@ -706,6 +707,102 @@ VAR
   END;
  END;
 
+FUNCTION verificar_estado_archivo_lideres(): boolean;
+ BEGIN
+  reset(archivo_lideres);
+  IF filesize(archivo_lideres) = 0 THEN
+   verificar_estado_archivo_lideres:= true
+  ELSE
+   verificar_estado_archivo_lideres:= false;
+  close(archivo_lideres);
+ END;
+
+FUNCTION busca_lider(lider: string): boolean;
+VAR
+ f: boolean;
+ BEGIN
+  f:= false;
+  REPEAT
+  read(archivo_lideres,registro_lideres);
+  IF lider = registro_lideres.nombre_apellido THEN
+   f:= true;
+  UNTIL eof(archivo_lideres) OR (f = true);
+  IF f = true THEN
+    busca_lider:= true
+  ELSE
+    busca_lider:= false;
+ END;
+
+PROCEDURE ver_lideres;
+VAR
+ opcion,lider: string;
+ BEGIN
+ IF verificar_estado_archivo_lideres() = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln();
+  writeln('==========================================================');
+  writeln('X Aun no hay registros cargados en el archivo de lideres X');
+  writeln('==========================================================');
+  delay(3000);
+  END
+ ELSE
+  BEGIN
+   REPEAT
+   reset(archivo_lideres);
+   clrscr;
+   textcolor(green);
+   writeln('PARA EMPEZAR CON LA BUSQUEDA INGRESE NOMBRE Y APELLIDO DE ALGUNA PERSONALIDAD HISTORICA');
+   writeln('=======================================================================================');
+   write('>>> Ingrese nombre y apellido: ');
+   readln(lider);
+   IF busca_lider(lider) = true THEN
+    BEGIN
+    textcolor(brown);
+    writeln('/////////////////////////////////////',lider,'///////////////////////////////////////');
+    writeln('-------------------------------------------------------------------------------------');
+    write('Nombre y Apellido: ',registro_lideres.nombre_apellido);
+    writeln();
+    write('Fecha de nacimiento: ',registro_lideres.fecha_nacimiento);
+    writeln();
+    write('Fecha de fallecimiento: ',registro_lideres.fecha_fallecimiento);
+    writeln();
+    write('Biografia: ',registro_lideres.biografia);
+    writeln();
+    write('Bando: ',registro_lideres.bando);
+    writeln();
+    textcolor(green);
+    writeln('======================================================================================');
+    writeln();
+    close(archivo_lideres);
+    END
+   ELSE
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('=======================');
+   writeln('X No existe ese lider X');
+   writeln('=======================');
+   writeln();
+   END;
+   REPEAT
+   textcolor(lightgreen);
+   write('>>> Desea volver a ingresar otra batalla[si/no]?: ');
+   readln(opcion);
+   IF (opcion <> 'si') AND (opcion <> 'no') THEN
+    BEGIN
+    textcolor(lightred);
+    writeln();
+    writeln('|////////////////////////////////////////|');
+    writeln('|Ingrese una respuesta valida. Por favor.|');
+    writeln('|////////////////////////////////////////|');
+    writeln();
+    END;
+    UNTIL (opcion = 'si') OR (opcion = 'no');
+   UNTIL (opcion = 'no');
+  END;
+ END;
+
 PROCEDURE portada_ocultismo_nazi;
  BEGIN
  gotoxy(whereX,whereY + 12);
@@ -958,6 +1055,8 @@ VAR
           ver_batallas_iconicas;
           END;
         3:BEGIN
+          clrscr;
+          ver_lideres;
           END;
         4:BEGIN
           END;
