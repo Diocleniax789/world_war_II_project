@@ -407,18 +407,16 @@ VAR
    writeln('----------------------------------------------------------------');
    writeln('|4|               Cargar sobre las armas                     |4|');
    writeln('----------------------------------------------------------------');
-   writeln('|5|            Cargar archivo del Holocausto                 |5|');
+   writeln('|5|          Cargar archivo de las Wanderwaffe               |5|');
    writeln('----------------------------------------------------------------');
-   writeln('|6|          Cargar archivo de las Wanderwaffe               |6|');
+   writeln('|6|               Cargar archivo trivia                      |6|');
    writeln('----------------------------------------------------------------');
-   writeln('|7|               Cargar archivo trivia                      |7|');
-   writeln('----------------------------------------------------------------');
-   writeln('|8|         Regresar al menu del desarollador                |8|');
+   writeln('|7|         Regresar al menu del desarollador                |7|');
    writeln('----------------------------------------------------------------');
    writeln();
    textcolor(lightmagenta);
    writeln('----------------------------------------------------------------');
-   write('Seleccione una opcion(teclas 1 al 8): ');
+   write('Seleccione una opcion(teclas 1 al 7): ');
    readln(opcion);
    CASE opcion OF
         1:BEGIN
@@ -441,11 +439,102 @@ VAR
           END;
         6:BEGIN
           END;
-        7:BEGIN
-          END;
    END;
-  UNTIL (opcion = 8);
+  UNTIL (opcion = 7);
   END;
+
+FUNCTION verifica_estado_archivo_informacion(): boolean;
+ BEGIN
+ IF filesize(archivo_informacion) = 0 THEN
+  verifica_estado_archivo_informacion:= true
+ ELSE
+  verifica_estado_archivo_informacion:= false;
+ END;
+
+PROCEDURE muestra_eventos_respecto_de_anio(anio: integer);
+ BEGIN
+ WHILE NOT eof(archivo_informacion) DO
+  BEGIN
+  read(archivo_informacion,registro_informacion);
+  IF anio = registro_informacion.anio THEN
+   BEGIN
+   writeln('Titulo: ',registro_informacion.titulo);
+   writeln('Texto: ',registro_informacion.texto);
+   writeln('Bandos enfrentados: ',registro_informacion.bandos_enfrentados);
+   END;
+   END;
+ END;
+
+PROCEDURE selecciona_titulo(titulo: string);
+VAR
+  f: boolean;
+  BEGIN
+  REPEAT
+  seek(archivo_informacion,filesize(archivo_informacion) - 1);
+  read(archivo_informacion,registro_informacion);
+  IF titulo = registro_informacion.titulo THEN
+   f:= true;
+  UNTIL eof(archivo_informacion) OR (f = true);
+  IF f = true THEN
+   BEGIN
+   writeln();
+   write('Ingrese la nueva modificacion: ');
+   readln(registro_informacion.texto);
+   seek(archivo_informacion,filesize(archivo_informacion) - 1);
+   write(archivo_informacion,registro_informacion);
+   writeln();
+   writeln('=========================================');
+   writeln('*** Registro modificado correctamente ***');
+   writeln('=========================================');
+   END;
+  END;
+
+
+PROCEDURE modificar_informacion_enciclopedia;
+VAR
+ titulo,opcion: string;
+ anio: integer;
+ BEGIN
+ reset(archivo_informacion);
+ IF verifica_estado_archivo_informacion() = true THEN
+  BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('==============================================================');
+   writeln('X Aun no hay registros cargados en el archivo de informacion X');
+   writeln('==============================================================');
+   delay(3000);
+   close(archivo_informacion);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  reset(archivo_informacion);
+  anio:= valida_anio();
+  muestra_eventos_respecto_de_anio(anio);
+  writeln();
+  writeln('Ingrese titulo del registro que desee modificar: ');
+  readln(titulo);
+  selecciona_titulo(titulo);
+  writeln();
+  REPEAT
+   textcolor(lightgreen);
+   write('>>> Desea volver a modificar otra registro[si/no]?: ');
+   readln(opcion);
+   IF (opcion <> 'si') AND (opcion <> 'no') THEN
+   BEGIN
+    textcolor(lightred);
+    writeln();
+    writeln('|////////////////////////////////////////|');
+    writeln('|Ingrese una respuesta valida. Por favor.|');
+    writeln('|////////////////////////////////////////|');
+    writeln();
+    END;
+  UNTIL (opcion = 'si') OR (opcion = 'no');
+  UNTIL (opcion = 'no');
+  close(archivo_informacion);
+  END;
+ END;
 
 PROCEDURE Modifica_informacion;
 VAR
@@ -456,17 +545,17 @@ VAR
    writeln('2. Modificar sobre las batallas iconicas');
    writeln('3. Modificar sobre los lideres');
    writeln('4. Modificar sobre las armas');
-   writeln('5. Modificar sobre el ocultismo Nazi');
-   writeln('6. Modificar archivo del Holocausto');
-   writeln('7. Modificar archivo de las Wanderwaffe');
-   writeln('8. Modificar archivo trivia');
-   writeln('9. Regresar al menu del desarollador.');
+   writeln('5. Modificar archivo de las Wanderwaffe');
+   writeln('6. Modificar archivo trivia');
+   writeln('7. Regresar al menu del desarollador.');
    writeln();
    writeln('-----------------------------------------------------------');
-   write('Seleccione una opcion: ');
+   write('Seleccione una opcion(teclas 1 al 7): ');
    readln(opcion);
    CASE opcion OF
         1:BEGIN
+          clrscr;
+          modificar_informacion_enciclopedia;
           END;
         2:BEGIN
           END;
@@ -478,12 +567,8 @@ VAR
           END;
         6:BEGIN
           END;
-        7:BEGIN
-          END;
-        8:BEGIN
-          END;
    END;
-  UNTIL (opcion = 9);
+  UNTIL (opcion = 7);
   END;
 
 PROCEDURE baja_informacion;
@@ -492,17 +577,16 @@ VAR
   BEGIN
   REPEAT
    clrscr;
-   writeln('1. Baja sobre las batallas iconicas');
-   writeln('2. Baja sobre los lideres');
-   writeln('3. Baja sobre las armas');
-   writeln('4. Baja sobre el ocultismo Nazi');
-   writeln('5. Baja archivo del Holocausto');
-   writeln('6. Baja archivo de las Wanderwaffe');
-   writeln('7. Baja archivo trivia');
-   writeln('8. Regresar al menu del desarollador.');
+   writeln('1. Baja informacion de la enciclopedia de la Segunda Guerra Mundial');
+   writeln('2. Baja sobre las batallas iconicas');
+   writeln('3. Baja sobre los lideres');
+   writeln('4. Baja sobre las armas');
+   writeln('5. Baja archivo de las Wanderwaffe');
+   writeln('6. Baja archivo trivia');
+   writeln('7. Regresar al menu del desarollador.');
    writeln();
    writeln('-----------------------------------------------------------');
-   write('Seleccione una opcion: ');
+   write('Seleccione una opcion(teclas 1 al 7): ');
    readln(opcion);
    CASE opcion OF
         1:BEGIN
@@ -520,7 +604,7 @@ VAR
         7:BEGIN
           END;
    END;
-  UNTIL (opcion = 8);
+  UNTIL (opcion = 7);
   END;
 
 PROCEDURE menu_desarrollador;
@@ -532,9 +616,9 @@ VAR
    writeln('--------------------------------------');
    writeln('|1|       Alta de informacion      |1|');
    writeln('--------------------------------------');
-   writeln('|2|       Baja de informacion      |2|');
+   writeln('|2|  Modificaciones de informacion |2|');
    writeln('--------------------------------------');
-   writeln('|3|  Modificaciones de informacion |3|');
+   writeln('|3|       Baja de informacion      |3|');
    writeln('--------------------------------------');
    writeln('|4|    Regresar al menu principal  |4|');
    writeln('--------------------------------------');
@@ -550,23 +634,15 @@ VAR
           END;
         2:BEGIN
           clrscr;
-          baja_informacion;
+          Modifica_informacion;
           END;
         3:BEGIN
           clrscr;
-          Modifica_informacion;
+          baja_informacion;
           END;
    END;
    UNTIL (opcion = 4);
    END;
-
-FUNCTION verifica_estado_archivo_informacion(): boolean;
- BEGIN
- IF filesize(archivo_informacion) = 0 THEN
-  verifica_estado_archivo_informacion:= true
- ELSE
-  verifica_estado_archivo_informacion:= false;
- END;
 
 PROCEDURE muestra_eventos_de_ese_anio(anio: integer);
  BEGIN
