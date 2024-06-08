@@ -1026,6 +1026,72 @@ VAR
   END;
  END;
 
+FUNCTION color_imagen():integer;
+VAR
+ i:integer;
+ BEGIN
+ randomize;
+ i:= random(15);
+ IF i <> 0 THEN
+ color_imagen:= i;
+ END;
+
+PROCEDURE ubicacion_automatica;
+VAR
+   color,i,x,y:integer;
+   BEGIN
+   randomize;
+   i:= 1;
+   WHILE (i <> 0) AND (NOT keypressed) DO
+    BEGIN
+    x:= random(50);
+    y:= random(50);
+    color:= color_imagen;
+    textcolor(color);
+    gotoxy(x,y);
+    gotoxy(x,whereY);
+    writeln('WWWWWWWWWWWN0d;.  :00:  .;d0NWWWWWWWWWWW');
+    gotoxy(x,whereY);
+    writeln('WWWWWWWWNKd;.     dOOd     .;dKNWWWWWWWW');
+    gotoxy(x,whereY);
+    writeln('WWWWWWN0c.  .;lxOKo  oKOxl;.  .c0NWWWWWW');
+    gotoxy(x,whereY);
+    writeln('WWWWWXd.   o0NWWWO    OWWWN0o   .dXWWWWW');
+    gotoxy(x,whereY);
+    writeln('WWWWXl. .lKWWWWWXc    cXWWWWWKl. .lXWWWW');
+    gotoxy(x,whereY);
+    writeln('WWWWk,. dNWWWWWNx.    .dNWWWWWNd .,kWWWW');
+    gotoxy(x,whereY);
+    writeln('WWWNKklclooloolc.      .coooloolclkKNWWW');
+    gotoxy(x,whereY);
+    writeln('WWWO::c:                        :c::OWWW');
+    gotoxy(x,whereY);
+    writeln('WWWk. .xXkc.                .ckXx. .kWWW');
+    gotoxy(x,whereY);
+    writeln('WWW0,  :XWNKx,            ,dKNWX:  ,0WWW');
+    gotoxy(x,whereY);
+    writeln('WWWNo. .oNWWXc            cXWWNo. .oNWWW');
+    gotoxy(x,whereY);
+    writeln('WWWWXl. .cKNx.     ..     .xNKl. .lXWWWW');
+    gotoxy(x,whereY);
+    writeln('WWWWWXd.  ck,   .ckKKkc.   ,kc  .dXWWWWW');
+    gotoxy(x,whereY);
+    writeln('WWWWWWN0c,oc..;lx0KKKK0xl;..co,c0NWWWWWW');
+    gotoxy(x,whereY);
+    writeln('WWWWWWWWNXOool;..........;looOXNWWWWWWWW');
+    gotoxy(x,whereY);
+    writeln('WWWWWWWWWWNNXx;.        .;xXNNWWWWWWWWWW');
+    delay(1000);
+    clrscr;
+    END;
+    readkey;
+   END;
+
+PROCEDURE protector_de_pantalla;
+ BEGIN
+  ubicacion_automatica;
+ END;
+
 PROCEDURE portada_ocultismo_nazi;
  BEGIN
  gotoxy(whereX,whereY + 12);
@@ -1284,6 +1350,8 @@ VAR
         4:BEGIN
           END;
         5:BEGIN
+          clrscr;
+          protector_de_pantalla;
           END;
         6:BEGIN
           clrscr;
