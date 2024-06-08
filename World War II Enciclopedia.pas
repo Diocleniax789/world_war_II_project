@@ -712,19 +712,51 @@ VAR
    BEGIN
    REPEAT
    clrscr;
+   gotoxy(whereX,whereY + 10);
+   textcolor(cyan);
+   writeln();
+   gotoxy(whereX + 30,whereY);
+   writeln('||=====================================||');
+   gotoxy(whereX + 30,whereY);
+   writeln('||     _____  __________    _____      ||');
+   gotoxy(whereX + 30,whereY);
+   writeln('||    /  _  \ \______   \  /     \     ||');
+   gotoxy(whereX + 30,whereY);
+   writeln('||   /  /_\  \ |    |  _/ /  \ /  \    ||');
+   gotoxy(whereX + 30,whereY);
+   writeln('||  /    |    \|    |   \/    Y    \   ||');
+   gotoxy(whereX + 30,whereY);
+   writeln('||  \____|__  /|______  /\____|__  /   ||');
+   gotoxy(whereX + 30,whereY);
+   writeln('||          \/        \/         \/    ||');
+   gotoxy(whereX + 30,whereY);
+   writeln('||=====================================||');
+   textcolor(magenta);
+   writeln();
+   gotoxy(whereX + 30,whereY);
    writeln('--------------------------------------');
+   gotoxy(whereX + 30,whereY);
    writeln('|1|       Alta de informacion      |1|');
+   gotoxy(whereX + 30,whereY);
    writeln('--------------------------------------');
+   gotoxy(whereX + 30,whereY);
    writeln('|2|  Modificaciones de informacion |2|');
+   gotoxy(whereX + 30,whereY);
    writeln('--------------------------------------');
+   gotoxy(whereX + 30,whereY);
    writeln('|3|       Baja de informacion      |3|');
+   gotoxy(whereX + 30,whereY);
    writeln('--------------------------------------');
+   gotoxy(whereX + 30,whereY);
    writeln('|4|    Regresar al menu principal  |4|');
+   gotoxy(whereX + 30,whereY);
    writeln('--------------------------------------');
    writeln();
-   textcolor(lightmagenta);
+   gotoxy(whereX + 30,whereY);
+   textcolor(green);
    writeln('======================================');
-   writeln('Seleccione una opcion(teclas 1 al 4): ');
+   gotoxy(whereX + 30,whereY);
+   write('Seleccione una opcion(teclas 1 al 4): ');
    readln(opcion);
    CASE opcion OF
         1:BEGIN
