@@ -10,6 +10,7 @@ TYPE
                   titulo: string;
                   texto: string;
                   bandos_enfrentados: string;
+                  activo: boolean;
                   END;
 
     batallas = RECORD
@@ -17,6 +18,7 @@ TYPE
                titulo: string;
                texto: string;
                victoria: string;
+               activo: boolean;
                END;
 
     lideres = RECORD
@@ -25,6 +27,7 @@ TYPE
               fecha_fallecimiento: string;
               biografia: string;
               bando: string;
+              activo: boolean;
               END;
 
     armas = RECORD
@@ -32,6 +35,7 @@ TYPE
             clase_arma: string;
             pais_de_origen: string;
             info_arma: string;
+            activo: boolean;
             END;
 
 VAR
@@ -136,12 +140,16 @@ VAR
  writeln();
  write('>>> Ingrese que bandos se han enfrentado: ');
  readln(registro_informacion.bandos_enfrentados);
+ registro_informacion.activo:= true;
  writeln();
  writeln('--------------------------------------');
  writeln('||||||||||||||||||||||||||||||||||||||');
  seek(archivo_informacion, filesize(archivo_informacion));
  write(archivo_informacion, registro_informacion);
  writeln();
+ writeln('==================================================');
+ writeln('*** Se han registrado los datos existosamente! ***');
+ writeln('==================================================');
  REPEAT
  textcolor(lightcyan);
  write('>>> Desea volver a ingresar nueva informacion[si/no]?: ');
@@ -180,6 +188,7 @@ VAR
    writeln();
    write('>>> Ingrese bando ganador: ');
    readln(registro_batallas.victoria);
+   registro_batallas.activo:= true;
    writeln();
    writeln('--------------------------------------');
    writeln('||||||||||||||||||||||||||||||||||||||');
@@ -230,6 +239,7 @@ VAR
     writeln();
     write('>>> Ingrese bando al que pertenece: ');
     readln(registro_lideres.bando);
+    registro_lideres.activo:= true;
     writeln();
     writeln('---------------------------------------');
     writeln('|*|*|*|*|*|*|*|*|*|*|*|*|*|*|*|*|*|*|*|');
@@ -308,6 +318,7 @@ VAR
   writeln();
   write('>>> Ingrese informacion adicional del arma: ');
   readln(registro_armas.info_arma);
+  registro_armas.activo:= true;
   writeln();
   writeln('--------------------------------------------');
   writeln('////////////////////////////////////////////');
@@ -345,6 +356,7 @@ VAR
    writeln();
    write('>>> Ingrese informacion adicional del arma: ');
    readln(registro_armas.info_arma);
+   registro_armas.activo:= true;
    writeln();
    writeln('--------------------------------------------');
    writeln('////////////////////////////////////////////');
@@ -458,14 +470,20 @@ PROCEDURE muestra_eventos_respecto_de_anio(anio: integer);
   read(archivo_informacion,registro_informacion);
   IF anio = registro_informacion.anio THEN
    BEGIN
+   writeln('------------------------------------------------------------');
+   writeln();
    writeln('Titulo: ',registro_informacion.titulo);
+   writeln();
    writeln('Texto: ',registro_informacion.texto);
+   writeln();
    writeln('Bandos enfrentados: ',registro_informacion.bandos_enfrentados);
+   writeln();
+   writeln('------------------------------------------------------------');
    END;
    END;
  END;
 
-PROCEDURE selecciona_titulo(titulo: string);
+PROCEDURE selecciona_modifica_titulo(titulo: string);
 VAR
   f: boolean;
   BEGIN
@@ -478,17 +496,17 @@ VAR
   IF f = true THEN
    BEGIN
    writeln();
-   write('Ingrese la nueva modificacion: ');
+   write('>>> Ingrese la nueva modificacion: ');
    readln(registro_informacion.texto);
    seek(archivo_informacion,filesize(archivo_informacion) - 1);
    write(archivo_informacion,registro_informacion);
    writeln();
+   textcolor(lightgreen);
    writeln('=========================================');
    writeln('*** Registro modificado correctamente ***');
    writeln('=========================================');
    END;
   END;
-
 
 PROCEDURE modificar_informacion_enciclopedia;
 VAR
@@ -509,16 +527,21 @@ VAR
  ELSE
   BEGIN
   REPEAT
+  clrscr;
   reset(archivo_informacion);
+  writeln('INGRESE UN ANIO Y LUEGO SU TITULO, PARA PODER MODIFICAR LA INFORMACION      ');
+  writeln('============================================================================');
   anio:= valida_anio();
   muestra_eventos_respecto_de_anio(anio);
   writeln();
-  writeln('Ingrese titulo del registro que desee modificar: ');
+  textcolor(yellow);
+  write('>>> Ingrese titulo del registro que desee modificar: ');
   readln(titulo);
-  selecciona_titulo(titulo);
+  selecciona_modifica_titulo(titulo);
   writeln();
+  writeln('----------------------------------------------------------------------------');
   REPEAT
-   textcolor(lightgreen);
+   textcolor(lightcyan);
    write('>>> Desea volver a modificar otra registro[si/no]?: ');
    readln(opcion);
    IF (opcion <> 'si') AND (opcion <> 'no') THEN
@@ -571,6 +594,80 @@ VAR
   UNTIL (opcion = 7);
   END;
 
+PROCEDURE selecciona_da_de_baja(titulo: string);
+VAR
+ f: boolean;
+ BEGIN
+ f:= false;
+ REPEAT
+ seek(archivo_informacion,filesize(archivo_informacion) - 1);
+ read(archivo_informacion,registro_informacion);
+ IF titulo = registro_informacion.titulo THEN
+  f:= true;
+ UNTIL eof(archivo_informacion) OR (f = true);
+ IF f = true THEN
+  BEGIN
+  registro_informacion.activo:= false;
+  seek(archivo_informacion,filesize(archivo_informacion) - 1);
+  write(archivo_informacion,registro_informacion);
+  writeln();
+  textcolor(lightgreen);
+  writeln('===========================================');
+  writeln('*** Registro dado de baja correctamente ***');
+  writeln('===========================================');
+  END;
+ END;
+
+PROCEDURE baja_informacion_enciclopedia;
+VAR
+  titulo,opcion: string;
+  anio: integer;
+  BEGIN
+  reset(archivo_informacion);
+  IF verifica_estado_archivo_informacion() = true THEN
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('==============================================================');
+   writeln('X Aun no hay registros cargados en el archivo de informacion X');
+   writeln('==============================================================');
+   close(archivo_informacion);
+   delay(3000);
+   END
+  ELSE
+   BEGIN
+   REPEAT
+   clrscr;
+   reset(archivo_informacion);
+   writeln('PARA DAR DE BAJA UN REGISTRO, INGRESE UN ANIO Y LUEGO SELECCIONE');
+   writeln('---------------------------------------------------------------');
+   anio:= valida_anio();
+   muestra_eventos_respecto_de_anio(anio);
+   textcolor(yellow);
+   writeln();
+   write('>>> Ingrese titulo del registro que quiere dar de baja: ');
+   readln(titulo);
+   selecciona_da_de_baja(titulo);
+   writeln('---------------------------------------------------------------');
+   REPEAT
+    textcolor(lightgreen);
+    write('>>> Desea volver a modificar otra registro[si/no]?: ');
+    readln(opcion);
+    IF (opcion <> 'si') AND (opcion <> 'no') THEN
+     BEGIN
+     textcolor(lightred);
+     writeln();
+     writeln('|////////////////////////////////////////|');
+     writeln('|Ingrese una respuesta valida. Por favor.|');
+     writeln('|////////////////////////////////////////|');
+     writeln();
+     END;
+    UNTIL (opcion = 'si') OR (opcion = 'no');
+   UNTIL (opcion = 'no');
+   close(archivo_informacion);
+   END;
+  END;
+
 PROCEDURE baja_informacion;
 VAR
   opcion: integer;
@@ -590,6 +687,8 @@ VAR
    readln(opcion);
    CASE opcion OF
         1:BEGIN
+          clrscr;
+          baja_informacion_enciclopedia;
           END;
         2:BEGIN
           END;
