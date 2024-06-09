@@ -782,9 +782,12 @@ PROCEDURE muestra_eventos_de_ese_anio(anio: integer);
    read(archivo_informacion,registro_informacion);
    IF anio = registro_informacion.anio THEN
     BEGIN
-    writeln(registro_informacion.titulo);
-    writeln(registro_informacion.texto);
-    writeln(registro_informacion.bandos_enfrentados);
+    writeln();
+    writeln('Titulo: ',registro_informacion.titulo);
+    writeln();
+    writeln('Informacion: ',registro_informacion.texto);
+    writeln();
+    writeln('Bandos enfrentados: ',registro_informacion.bandos_enfrentados);
     writeln();
     writeln('====================================================================');
     END;
@@ -805,11 +808,13 @@ VAR
    writeln('X Aun no hay registros cargados en el archivo de informacion X');
    writeln('==============================================================');
    delay(3000);
+   close(archivo_informacion);
    END
   ELSE
    BEGIN
    REPEAT
     clrscr;
+    reset(archivo_informacion);
     textcolor(lightgreen);
     anio:= valida_anio();
     writeln();
@@ -817,10 +822,11 @@ VAR
     writeln('///////////////////////////',anio,'/////////////////////////////////');
     writeln('====================================================================');
     muestra_eventos_de_ese_anio(anio);
+    close(archivo_informacion);
     writeln();
     REPEAT
      textcolor(lightgreen);
-     write('>>> Desea volver a ingresar otra arma[si/no]?: ');
+     write('>>> Desea volver a ingresar otra anio[si/no]?: ');
      readln(opcion);
       IF (opcion <> 'si') AND (opcion <> 'no') THEN
        BEGIN
@@ -834,7 +840,6 @@ VAR
     UNTIL (opcion = 'si') OR (opcion = 'no');
    UNTIL (opcion = 'no');
    END;
-  close(archivo_informacion);
  END;
 
 FUNCTION verifica_estado_archivo_batallas(): boolean;
@@ -1283,23 +1288,23 @@ VAR
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|2|              Batallas iconicas                |2|');
+   writeln('|2|               Batallas iconicas               |2|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|3|                  Lideres                      |3|');
+   writeln('|3|                   Lideres                     |3|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|4|                   Armas                       |4|');
+   writeln('|4|                    Armas                      |4|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|5|           Protector de pantalla               |5|');
+   writeln('|5|            Protector de pantalla              |5|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|6|              Ocultismo Nazi                   |6|');
+   writeln('|6|               Ocultismo Nazi                  |6|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
@@ -1311,7 +1316,7 @@ VAR
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|9|                Wanderwaffe                    |9|');
+   writeln('|9|                 Wanderwaffe                   |9|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
@@ -1379,5 +1384,4 @@ crea_archivo_batallas;
 crea_archivo_lideres;
 crea_archivo_armas;
 menu_principal;
-readkey;
 END.
