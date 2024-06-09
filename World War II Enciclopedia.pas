@@ -1238,6 +1238,136 @@ VAR
  UNTIL (atras_adelante = #13);
  END;
 
+FUNCTION ultima_pagina():string;
+VAR
+ tecla: string;
+ BEGIN
+  REPEAT
+   clrscr;
+   writeln('holaaaaa2');
+   writeln('=================');
+   writeln('| Atras <=== |');
+   writeln('=================');
+   writeln('| Salir - Enter |');
+   writeln('=================');
+   tecla:= readkey;
+   until (tecla = #75) OR (tecla = #13);
+   ultima_pagina:= tecla;
+ END;
+
+PROCEDURE enciclopedia_holocausto;
+VAR
+ tecla: string;
+ BEGIN
+  REPEAT
+  clrscr;
+  textcolor(yellow);
+  gotoxy(whereX,whereY + 15);
+  writeln();
+  gotoxy(whereX +25,whereY);
+  writeln('============================================================');
+  gotoxy(whereX +25,whereY);
+  writeln('||  ,,          ,,                                ,       ||');
+  gotoxy(whereX +25,whereY);
+  writeln('||  ||          ||              _                ||       ||');
+  gotoxy(whereX +25,whereY);
+  writeln('||  ||/\\  /\\ ||   /\\  _-_  < \, \\ \\  _-_, =||=  /\\  ||');
+  gotoxy(whereX +25,whereY);
+  writeln('||  || || || || || || || ||    /-|| || || ||_.   || || || ||');
+  gotoxy(whereX +25,whereY);
+  writeln('||  || || || || || || || ||   (( || || ||  ~ ||  || || || ||');
+  gotoxy(whereX +25,whereY);
+  writeln('||  \\ |/ \\,/  \\ \\,/  \\,/  \/\\ \\/\\ ,-_-   \\,\\,/  ||');
+  gotoxy(whereX +25,whereY);
+  writeln('||                                                        ||');
+  gotoxy(whereX +25,whereY);
+  writeln('============================================================');
+  writeln();
+  gotoxy(whereX +  45,whereY);
+  writeln('=================');
+  gotoxy(whereX +  45,whereY);
+  writeln('| Adelante ===> |');
+  gotoxy(whereX +  45,whereY);
+  writeln('=================');
+  gotoxy(whereX +  45,whereY);
+  writeln('| Salir - Enter |');
+  gotoxy(whereX +  45,whereY);
+  writeln('=================');
+  tecla:= readkey;
+  IF tecla = #77 THEN
+   BEGIN
+    REPEAT
+     clrscr;
+     writeln('=======================================================================================================');
+     writeln('||//////////////////////////////////////////////HOLOCAUSTO///////////////////////////////////////////||');
+     writeln('||=====================================================================================================');
+     writeln('||                                                                                                   ||');
+     writeln('||  El Holocausto fue un genocidio sistemático y burocráticamente organizado, llevado a cabo por el  ||');
+     writeln('||  régimen nazi y sus colaboradores durante la Segunda Guerra Mundial. A continuación se presentan  ||');
+     writeln('||  algunas explicaciones breves sobre diferentes aspectos del Holocausto:                           ||');
+     writeln('||                                                                                                   ||');
+     writeln('||---------------------------------------------------------------------------------------------------||');
+     writeln('||                                                                                                   ||');
+     writeln('|| Contexto Historico:                                                                               ||');
+     writeln('||                                                                                                   ||');
+     writeln('|| * Ascenso del Nazismo: En 1933, Adolf Hitler y el Partido Nazi ascendieron al poder en Alemania,  ||');
+     writeln('||   promoviendo una ideología antisemita, racista y ultranacionalista.                              ||');
+     writeln('||                                                                                                   ||');
+     writeln('|| * Propaganda Antisemita: Los nazis utilizaron propaganda intensiva para deshumanizar a los        ||');
+     writeln('||   judíos y otros grupos considerados "indeseables", presentándolos como enemigos de la            ||');
+     writeln('||   nación alemana.                                                                                 ||');
+     writeln('||                                                                                                   ||');
+     writeln('||---------------------------------------------------------------------------------------------------||');
+     writeln('||                                                                                                   ||');
+     writeln('|| Políticas Antisemitas                                                                             ||');
+     writeln('||                                                                                                   ||');
+     writeln('|| * Leyes de Núremberg (1935): Estas leyes privaron a los judíos de sus derechos civiles básicos,   ||');
+     writeln('||   prohibiéndoles casarse o tener relaciones sexuales con personas de "sangre alemana o afín" y    ||');
+     writeln('||   excluyéndolos de la ciudadanía alemana.                                                         ||');
+     writeln('||                                                                                                   ||');
+     writeln('|| * Kristallnacht (1938): También conocida como la "Noche de los Cristales Rotos", fue un pogromo   ||');
+     writeln('||   asivo contra los judíos en Alemania y Austria, donde sinagogas, negocios y hogares judíos       ||');
+     writeln('||   fueron destruidos, y miles de judíos fueron arrestados.                                         ||');
+     writeln('||                                                                                                   ||');
+     writeln('||---------------------------------------------------------------------------------------------------||');
+     writeln('||                                                                                                   ||');
+     writeln('|| Implementación del Genocidio                                                                      ||');
+     writeln('||                                                                                                   ||');
+     writeln('|| * Ghettos: Los judíos fueron forzados a vivir en guetos, áreas urbanas cerradas donde las         ||');
+     writeln('||   condiciones de vida eran extremadamente duras, con hacinamiento, hambre y enfermedades.         ||');
+     writeln('||                                                                                                   ||');
+     writeln('|| * Campos de Concentración y Exterminio: Se establecieron campos de concentración y                ||');
+     writeln('||   exterminio como Auschwitz, Treblinka y Sobibor, donde millones de judíos y otros grupos fueron  ||');
+     writeln('||   asesinados en cámaras de gas, fusilados, o murieron de hambre y enfermedades.                   ||');
+     writeln('||                                                                                                   ||');
+     writeln('=======================================================================================================');
+     writeln('|/////////////////////////////////////////////////////////////////////////////////////////////////////|');
+     writeln('=======================================================================================================');
+     gotoxy(whereX +  40,whereY);
+     writeln('==================');
+     gotoxy(whereX +  40,whereY);
+     writeln('|   ATRAS <===  |');
+     gotoxy(whereX +  40,whereY);
+     writeln('=================');
+     gotoxy(whereX +  40,whereY);
+     writeln('| ADELANTE ===> |');
+     gotoxy(whereX +  40,whereY);
+     writeln('=================');
+     gotoxy(whereX +  40,whereY);
+     writeln('| SALIR - ENTER |');
+     gotoxy(whereX +  40,whereY);
+     writeln('=================');
+     tecla:= readkey;
+     IF tecla = #77 THEN
+      BEGIN
+      IF ultima_pagina = #13 THEN
+       tecla:= ultima_pagina;
+      END;
+    UNTIL (tecla = #75) OR (tecla = #13);
+  END;
+  UNTIL (tecla = #13);
+ END;
+
 PROCEDURE menu_principal;
 VAR
    opcion: integer;
@@ -1308,30 +1438,26 @@ VAR
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|7|     Tabla cronologica de la contienda         |7|');
+   writeln('|7|                 Holocausto                    |7|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|8|                 Holocausto                    |8|');
+   writeln('|8|                 Wanderwaffe                   |8|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|9|                 Wanderwaffe                   |9|');
+   writeln('|9|                   Trivia                      |9|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|10|                 Trivia                      |10|');
-   gotoxy(whereX + 24,whereY);
-   writeln('-----------------------------------------------------');
-   gotoxy(whereX + 24,whereY);
-   writeln('|11|                  Salir                      |11|');
+   writeln('|10|                   Salir                     |10|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    writeln();
    textcolor(lightmagenta);
    writeln();
    gotoxy(whereX + 25,whereY);
-   writeln('------------------------------------------------');
+   writeln('-----------------------------------------------------');
    gotoxy(whereX + 25,whereY);
    write('Seleccione una opcion(teclas 0 a 11): ');
    readln(opcion);
@@ -1363,15 +1489,15 @@ VAR
           ocultismo_nazi;
           END;
         7:BEGIN
+          clrscr;
+          enciclopedia_holocausto;
           END;
         8:BEGIN
           END;
         9:BEGIN
           END;
-        10:BEGIN
-           END;
    END;
-   UNTIL (opcion = 11);
+   UNTIL (opcion = 10);
    END;
 
 BEGIN
