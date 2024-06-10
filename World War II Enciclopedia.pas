@@ -83,7 +83,7 @@ PROCEDURE crea_archivo_armas;
 PROCEDURE crea_archivo_wunderwaffe;
  BEGIN
  rewrite(archivo_wunderwaffe);
- close(wunderwaffe);
+ close(archivo_wunderwaffe);
  END;
 
 FUNCTION valida_anio(): integer;
@@ -402,6 +402,119 @@ VAR
  close(archivo_armas);
  END;
 
+FUNCTION verificar_estado_archivo_wunderwaffe(): boolean;
+ BEGIN
+ IF filesize(archivo_wunderwaffe) = 0 THEN
+  verificar_estado_archivo_wunderwaffe:= true
+ ELSE
+  verificar_estado_archivo_wunderwaffe:= false;
+ END;
+
+FUNCTION existe_arma_wunderwaffe(nombre_arma: string): boolean;
+VAR
+ f: boolean;
+ BEGIN
+ f:= false;
+ REPEAT
+  read(archivo_wunderwaffe,registro_wunderwaffe);
+  IF nombre_arma = registro_wunderwaffe.nombre THEN
+   f:= true;
+ UNTIL eof(archivo_wunderwaffe) OR (f = true);
+ IF f = true THEN
+  existe_arma_wunderwaffe:= true
+ ELSE
+  existe_arma_wunderwaffe:= false;
+ END;
+
+PROCEDURE carga_wunderwaffe;
+VAR
+ nombre_arma,opcion: string;
+ BEGIN
+ reset(archivo_wunderwaffe);
+ IF verificar_estado_archivo_wunderwaffe = true THEN
+  BEGIN
+  clrscr;
+  textcolor(lightcyan);
+  writeln('/////////////////////////////////////////////////////////////');
+  writeln('=============================================================');
+  writeln();
+  write('>>> Ingrese clase de arma: ');
+  readln(registro_wunderwaffe.clase);
+  writeln();
+  write('>>> Ingrese nombre del arma: ');
+  readln(registro_wunderwaffe.nombre);
+  writeln();
+  write('>>> Ingrese informacion sobre al arma: ');
+  readln(registro_wunderwaffe.informacion);
+  writeln();
+  seek(archivo_wunderwaffe,filesize(archivo_wunderwaffe));
+  write(archivo_wunderwaffe,registro_wunderwaffe);
+  close(archivo_wunderwaffe);
+  textcolor(lightgreen);
+  writeln('============================================');
+  writeln('*** El registro fue cargado exitosamente ***');
+  writeln('============================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  reset(archivo_wunderwaffe);
+  clrscr;
+  textcolor(lightcyan);
+  writeln('/////////////////////////////////////////////////////////////');
+  writeln('=============================================================');
+  writeln();
+  write('>>> Ingrese clase de arma:');
+  readln(registro_wunderwaffe.clase);
+  writeln();
+  write('>>> Ingrese nombre del arma: ');
+  readln(nombre_arma);
+  IF existe_arma_wunderwaffe(nombre_arma) = true THEN
+   BEGIN
+   textcolor(lightred);
+   writeln('===================================');
+   writeln('X Esa arma ya existe en el registro');
+   writeln('===================================');
+   close(archivo_wunderwaffe);
+   writeln();
+   END
+  ELSE
+   BEGIN
+   registro_wunderwaffe.nombre:= nombre_arma;
+   write('>>> Ingrese informacion sobre el arma: ');
+   readln(registro_wunderwaffe.informacion);
+   seek(archivo_wunderwaffe,filesize(archivo_wunderwaffe));
+   write(archivo_wunderwaffe,registro_wunderwaffe);
+   close(archivo_wunderwaffe);
+   writeln();
+   textcolor(lightgreen);
+   writeln('=============================================');
+   writeln('*** El registro fue cargado existosamente ***');
+   writeln('=============================================');
+   writeln();
+   END;
+   REPEAT
+   writeln();
+   texcolor(lightgreen);
+   writeln('----------------------------------------------');
+   write('Desea intentar nuevamente[s/n]:? ');
+   readln(opcion);
+   IF (opcion <> 's') AND (opcion <> 'n')  THEN
+    BEGIN
+    textcolor(lightred);
+    writeln();
+    writeln('==================================');
+    writeln('X Ingrese una respuesta adecuada X');
+    writeln('==================================');
+    writeln();
+    END;
+   UNTIL (opcion = 's') OR (opcion = 'n');
+  UNTIL (opcion = 'n');
+ END;
+ END;
+
+
 PROCEDURE carga_de_informacion;
 VAR
   opcion: integer;
@@ -462,6 +575,7 @@ VAR
           carga_de_armas;
           END;
         5:BEGIN
+          carga_wunderwaffe;
           END;
         6:BEGIN
           END;
@@ -1519,7 +1633,7 @@ assign(archivo_informacion,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_
 assign(archivo_batallas,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_batallas.dat');
 assign(archivo_lideres,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_lideres.dat');
 assign(archivo_armas,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_armas.dat');
-assing(archivo_wunderwaffe,'C:\Users\JULIO\Desktop\world_war_II_project\wunderwaffe.dat');
+assign(archivo_wunderwaffe,'C:\Users\JULIO\Desktop\world_war_II_project\wunderwaffe.dat');
 crea_archivo_informacion;
 crea_archivo_batallas;
 crea_archivo_lideres;
