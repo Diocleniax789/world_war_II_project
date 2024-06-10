@@ -472,6 +472,7 @@ VAR
   readln(nombre_arma);
   IF existe_arma_wunderwaffe(nombre_arma) = true THEN
    BEGIN
+   writeln();
    textcolor(lightred);
    writeln('===================================');
    writeln('X Esa arma ya existe en el registro');
@@ -496,7 +497,7 @@ VAR
    END;
    REPEAT
    writeln();
-   texcolor(lightgreen);
+   textcolor(lightgreen);
    writeln('----------------------------------------------');
    write('Desea intentar nuevamente[s/n]:? ');
    readln(opcion);
@@ -513,7 +514,6 @@ VAR
   UNTIL (opcion = 'n');
  END;
  END;
-
 
 PROCEDURE carga_de_informacion;
 VAR
@@ -548,9 +548,7 @@ VAR
    writeln('----------------------------------------------------------------');
    writeln('|5|          Cargar archivo de las Wanderwaffe               |5|');
    writeln('----------------------------------------------------------------');
-   writeln('|6|               Cargar archivo trivia                      |6|');
-   writeln('----------------------------------------------------------------');
-   writeln('|7|         Regresar al menu del desarollador                |7|');
+   writeln('|6|         Regresar al menu del desarollador                |6|');
    writeln('----------------------------------------------------------------');
    writeln();
    textcolor(lightmagenta);
@@ -577,10 +575,8 @@ VAR
         5:BEGIN
           carga_wunderwaffe;
           END;
-        6:BEGIN
-          END;
    END;
-  UNTIL (opcion = 7);
+  UNTIL (opcion = 6);
   END;
 
 FUNCTION verifica_estado_archivo_informacion(): boolean;
@@ -687,6 +683,16 @@ VAR
   END;
  END;
 
+FUNCTION verifica_estado_archivo_batallas(): boolean;
+ BEGIN
+ reset(archivo_batallas);
+ IF filesize(archivo_batallas) = 0 THEN
+  verifica_estado_archivo_batallas:= true
+ ELSE
+  verifica_estado_archivo_batallas:= false;
+ close(archivo_batallas);
+ END;
+
 PROCEDURE Modifica_informacion;
 VAR
   opcion: integer;
@@ -697,8 +703,7 @@ VAR
    writeln('3. Modificar sobre los lideres');
    writeln('4. Modificar sobre las armas');
    writeln('5. Modificar archivo de las Wanderwaffe');
-   writeln('6. Modificar archivo trivia');
-   writeln('7. Regresar al menu del desarollador.');
+   writeln('6. Regresar al menu del desarollador.');
    writeln();
    writeln('-----------------------------------------------------------');
    write('Seleccione una opcion(teclas 1 al 7): ');
@@ -719,7 +724,7 @@ VAR
         6:BEGIN
           END;
    END;
-  UNTIL (opcion = 7);
+  UNTIL (opcion = 6);
   END;
 
 PROCEDURE selecciona_da_de_baja(titulo: string);
@@ -807,8 +812,7 @@ VAR
    writeln('3. Baja sobre los lideres');
    writeln('4. Baja sobre las armas');
    writeln('5. Baja archivo de las Wanderwaffe');
-   writeln('6. Baja archivo trivia');
-   writeln('7. Regresar al menu del desarollador.');
+   writeln('6. Regresar al menu del desarollador.');
    writeln();
    writeln('-----------------------------------------------------------');
    write('Seleccione una opcion(teclas 1 al 7): ');
@@ -828,10 +832,8 @@ VAR
           END;
         6:BEGIN
           END;
-        7:BEGIN
-          END;
    END;
-  UNTIL (opcion = 7);
+  UNTIL (opcion = 6);
   END;
 
 PROCEDURE menu_desarrollador;
@@ -968,16 +970,6 @@ VAR
     UNTIL (opcion = 'si') OR (opcion = 'no');
    UNTIL (opcion = 'no');
    END;
- END;
-
-FUNCTION verifica_estado_archivo_batallas(): boolean;
- BEGIN
- reset(archivo_batallas);
- IF filesize(archivo_batallas) = 0 THEN
-  verifica_estado_archivo_batallas:= true
- ELSE
-  verifica_estado_archivo_batallas:= false;
- close(archivo_batallas);
  END;
 
 FUNCTION muestra_batalla(batalla: string): boolean;
@@ -1574,11 +1566,7 @@ VAR
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|9|                   Trivia                      |9|');
-   gotoxy(whereX + 24,whereY);
-   writeln('-----------------------------------------------------');
-   gotoxy(whereX + 24,whereY);
-   writeln('|10|                   Salir                     |10|');
+   writeln('|9|                   Salir                       |9|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    writeln();
@@ -1587,7 +1575,7 @@ VAR
    gotoxy(whereX + 25,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 25,whereY);
-   write('Seleccione una opcion(teclas 0 a 11): ');
+   write('Seleccione una opcion(teclas 0 a 9): ');
    readln(opcion);
    CASE opcion OF
         0:BEGIN
@@ -1622,13 +1610,56 @@ VAR
           END;
         8:BEGIN
           END;
-        9:BEGIN
-          END;
    END;
-   UNTIL (opcion = 10);
+   UNTIL (opcion = 9);
    END;
 
+
+
+PROCEDURE pantalla_carga;
+VAR
+ color,time: integer;
+ BEGIN
+ time:=0;
+ REPEAT
+  CLRSCR;
+  randomize;
+  color:= random(15);
+  textcolor(color);
+  time:= time + 100;
+  gotoxy(whereX, whereY +20);
+  gotoxy(whereX + 33,whereY);
+  writeln('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM ');
+  gotoxy(whereX + 33,whereY);
+  writeln('MMMMMMMMMMMMMMMMMWWMMMMMMMMMMMMMMMMMMMMM ');
+  gotoxy(whereX + 33,whereY);
+  writeln('MMMMMMMMMMMMWNKOxl::cccccxXMMMMMMMMMMMMM ');
+  gotoxy(whereX + 33,whereY);
+  writeln('MWNNNNNNNNXKd,..         .OMMMMMMMMMMMMM ');
+  gotoxy(whereX + 33,whereY);
+  writeln('..............           .okOOkxoxOKNMMM ');
+  gotoxy(whereX + 33,whereY);
+  writeln('MMMMMMMMMMMMO                      .,xNM ');
+  gotoxy(whereX + 33,whereY);
+  writeln('MMMMMMMWWX0Ol.                       lXM ');
+  gotoxy(whereX + 33,whereY);
+  writeln('MMMW0oc:;..                          0MM ');
+  gotoxy(whereX + 33,whereY);
+  writeln('MMNk,                                lKM ');
+  gotoxy(whereX + 33,whereY);
+  writeln('MMXd. ., .          .          .....c:dW ');
+  gotoxy(whereX + 33,whereY);
+  writeln('MMWN0kO0x,..,od;.. :c,.. ld:...lo:::coKM ');
+  gotoxy(whereX + 33,whereY);
+  writeln('MMMMMMWNXOkk0XX0kkOKX0kk0KX0kkO0K0kk0NMM ');
+  gotoxy(whereX + 33,whereY);
+  writeln('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM ');
+  delay(80);
+  UNTIL ((color < 0) AND (color > 15)) OR (time = 3000) ;
+ END;
+
 BEGIN
+pantalla_carga;
 assign(archivo_informacion,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_informacion.dat');
 assign(archivo_batallas,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_batallas.dat');
 assign(archivo_lideres,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_lideres.dat');
