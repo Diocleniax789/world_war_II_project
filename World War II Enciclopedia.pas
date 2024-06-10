@@ -38,6 +38,12 @@ TYPE
             activo: boolean;
             END;
 
+    wunderwaffe = RECORD
+                  nombre: string;
+                  clase: string;
+                  informacion:string;
+                  END;
+
 VAR
    archivo_informacion: FILE OF informacion;
    registro_informacion: informacion;
@@ -47,6 +53,8 @@ VAR
    registro_lideres: lideres;
    archivo_armas: FILE OF armas;
    registro_armas: armas;
+   archivo_wunderwaffe: FILE OF wunderwaffe;
+   registro_wunderwaffe: wunderwaffe;
 
 PROCEDURE crea_archivo_informacion;
  BEGIN
@@ -70,6 +78,12 @@ PROCEDURE crea_archivo_armas;
  BEGIN
  rewrite(archivo_armas);
  close(archivo_armas);
+ END;
+
+PROCEDURE crea_archivo_wunderwaffe;
+ BEGIN
+ rewrite(archivo_wunderwaffe);
+ close(wunderwaffe);
  END;
 
 FUNCTION valida_anio(): integer;
@@ -1505,9 +1519,11 @@ assign(archivo_informacion,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_
 assign(archivo_batallas,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_batallas.dat');
 assign(archivo_lideres,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_lideres.dat');
 assign(archivo_armas,'C:\Users\JULIO\Desktop\world_war_II_project\archivo_armas.dat');
+assing(archivo_wunderwaffe,'C:\Users\JULIO\Desktop\world_war_II_project\wunderwaffe.dat');
 crea_archivo_informacion;
 crea_archivo_batallas;
 crea_archivo_lideres;
 crea_archivo_armas;
+crea_archivo_wunderwaffe;
 menu_principal;
 END.
