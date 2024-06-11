@@ -42,6 +42,7 @@ TYPE
                   nombre: string;
                   clase: string;
                   informacion:string;
+                  activo: boolean;
                   END;
 
 VAR
@@ -446,6 +447,7 @@ VAR
   writeln();
   write('>>> Ingrese informacion sobre al arma: ');
   readln(registro_wunderwaffe.informacion);
+  registro_wunderwaffe.activo:= true;
   writeln();
   seek(archivo_wunderwaffe,filesize(archivo_wunderwaffe));
   write(archivo_wunderwaffe,registro_wunderwaffe);
@@ -465,7 +467,7 @@ VAR
   writeln('/////////////////////////////////////////////////////////////');
   writeln('=============================================================');
   writeln();
-  write('>>> Ingrese clase de arma:');
+  write('>>> Ingrese clase de arma: ');
   readln(registro_wunderwaffe.clase);
   writeln();
   write('>>> Ingrese nombre del arma: ');
@@ -482,6 +484,7 @@ VAR
    END
   ELSE
    BEGIN
+   writeln();
    registro_wunderwaffe.nombre:= nombre_arma;
    write('>>> Ingrese informacion sobre el arma: ');
    readln(registro_wunderwaffe.informacion);
@@ -553,7 +556,7 @@ VAR
    writeln();
    textcolor(lightmagenta);
    writeln('----------------------------------------------------------------');
-   write('Seleccione una opcion(teclas 1 al 7): ');
+   write('Seleccione una opcion(teclas 1 al 6): ');
    readln(opcion);
    CASE opcion OF
         1:BEGIN
@@ -986,7 +989,6 @@ VAR
    muestra_batalla:= true
   ELSE
    muestra_batalla:= false;
-
  END;
 
 PROCEDURE ver_batallas_iconicas;
@@ -1488,6 +1490,112 @@ VAR
   UNTIL (tecla = #13);
  END;
 
+PROCEDURE Busca_informacion_wunderwaffe(clase_arma: string);
+ BEGIN
+ textcolor(lightmagenta);
+ writeln('//////////////////////////////////////////WUNDERWAFFE////////////////////////////////////////////');
+ writeln('=================================================================================================');
+ WHILE NOT eof(archivo_wunderwaffe) DO
+  BEGIN
+  read(archivo_wunderwaffe,registro_wunderwaffe);
+  IF clase_arma = registro_wunderwaffe.clase THEN
+   BEGIN
+   writeln();
+   textcolor(lightcyan);
+   writeln('|| NOMBRE: ',registro_wunderwaffe.nombre);
+   writeln('|| ------');
+   writeln('||');
+   writeln('|| CLASE DE ARMA: ',registro_wunderwaffe.clase);
+   writeln('|| -------------');
+   writeln('||');
+   writeln('|| INFORMACION DETALLADA DEL ARMA: ');
+   writeln('|| -------------------------------');
+   writeln('||');
+   writeln('|| ',registro_wunderwaffe.informacion);
+   writeln();
+   textcolor(lightgreen);
+   writeln('===============================================================================================');
+   textcolor(lightred);
+   writeln('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-');
+   textcolor(lightgreen);
+   writeln('===============================================================================================');
+   END;
+  END;
+  writeln();
+  writeln('Presione enter para regresar al menu de clases...');
+  readln();
+ END;
+
+PROCEDURE ver_wunderwaffe;
+VAR
+ clase_arma: string;
+ opcion: integer;
+ BEGIN
+ reset(archivo_wunderwaffe);
+ IF verificar_estado_archivo_wunderwaffe = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln('==============================================================');
+  writeln('X Aun no hay registros cargados en el archivo de Wunderwaffe X');
+  writeln('==============================================================');
+  writeln();
+  delay(3000);
+  close(archivo_wunderwaffe);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  clrscr;
+  reset(archivo_wunderwaffe);
+  textcolor(lightcyan);
+  writeln('////////////////////////////WUNDERWAFFE/////////////////////////////////');
+  writeln('========================================================================');
+  writeln();
+  writeln('Escoja una clase de arma: ');
+  writeln('--------------------------');
+  writeln();
+  writeln('1. Tanque');
+  writeln('2. Cohete');
+  writeln('3. Infanteria');
+  writeln('4. Naval');
+  writeln('5. Avion');
+  writeln('6. Volver al menu principal');
+  writeln();
+  writeln('-------------------------');
+  write('Ingrese su eleccion: ');
+  readln(opcion);
+  CASE opcion OF
+       1:BEGIN
+          clrscr;
+          clase_arma:= 'Tanque';
+          Busca_informacion_wunderwaffe(clase_arma);
+         END;
+       2:BEGIN
+          clrscr;
+          clase_arma:= 'Cohete';
+          Busca_informacion_wunderwaffe(clase_arma);
+         END;
+       3:BEGIN
+          clrscr;
+          clase_arma:= 'Infanteria';
+          Busca_informacion_wunderwaffe(clase_arma);
+         END;
+       4:BEGIN
+          clrscr;
+          clase_arma:= 'Naval';
+          Busca_informacion_wunderwaffe(clase_arma);
+         END;
+       5:BEGIN
+          clrscr;
+          clase_arma:= 'Avion';
+          Busca_informacion_wunderwaffe(clase_arma);
+         END;
+  END;
+  UNTIL (opcion = 6);
+  close(archivo_wunderwaffe);
+  END;
+ END;
+
 PROCEDURE menu_principal;
 VAR
    opcion: integer;
@@ -1609,12 +1717,12 @@ VAR
           enciclopedia_holocausto;
           END;
         8:BEGIN
+          clrscr;
+          ver_wunderwaffe;
           END;
    END;
    UNTIL (opcion = 9);
    END;
-
-
 
 PROCEDURE pantalla_carga;
 VAR
