@@ -1745,7 +1745,11 @@ VAR
    BEGIN
    REPEAT
    clrscr;
-   gotoxy(whereX,whereY + 10);
+   textcolor(lightcyan);
+   writeln('=======================================================================================================');
+   writeln('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+   writeln('=======================================================================================================');
+   gotoxy(whereX,whereY + 3);
    textcolor(lightgreen);
    gotoxy(whereX + 30,whereY);
    writeln('==========================================');
@@ -1801,23 +1805,23 @@ VAR
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|5|            Protector de pantalla              |5|');
+   writeln('|5|             Protector de pantalla             |5|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|6|               Ocultismo Nazi                  |6|');
+   writeln('|6|                Ocultismo Nazi                 |6|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|7|                 Holocausto                    |7|');
+   writeln('|7|                  Holocausto                   |7|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|8|                 Wanderwaffe                   |8|');
+   writeln('|8|                  Wanderwaffe                  |8|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    gotoxy(whereX + 24,whereY);
-   writeln('|9|                   Salir                       |9|');
+   writeln('|9|                    Salir                      |9|');
    gotoxy(whereX + 24,whereY);
    writeln('-----------------------------------------------------');
    writeln();
@@ -1828,6 +1832,8 @@ VAR
    gotoxy(whereX + 25,whereY);
    write('Seleccione una opcion(teclas 0 a 9): ');
    readln(opcion);
+   writeln();
+   writeln();
    CASE opcion OF
         0:BEGIN
           clrscr;
