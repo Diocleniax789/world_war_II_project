@@ -804,6 +804,100 @@ VAR
    END;
   END;
 
+PROCEDURE muestra_eventos_respecto_de_anio_batallas(anio: integer);
+ BEGIN
+ WHILE NOT eof(archivo_batallas) DO
+  BEGIN
+  read(archivo_batallas,registro_batallas);
+  IF anio = registro_informacion.anio THEN
+   BEGIN
+   writeln('------------------------------------------------------------');
+   writeln();
+   writeln('Titulo: ',registro_batallas.titulo);
+   writeln();
+   writeln('Texto: ',registro_batallas.texto);
+   writeln();
+   writeln('Bandos enfrentados: ',registro_batallas.victoria);
+   writeln();
+   writeln('------------------------------------------------------------');
+   END;
+   END;
+ END;
+
+PROCEDURE selecciona_da_de_baja_batallas(titulo: string);
+VAR
+ f: boolean;
+ BEGIN
+ f:= false;
+ REPEAT
+ seek(archivo_batallas,filesize(archivo_batallas) - 1);
+ read(archivo_batallas,registro_batallas);
+ IF titulo = registro_batallas.titulo THEN
+  f:= true;
+ UNTIL eof(archivo_batallas) OR (f = true);
+ IF f = true THEN
+  BEGIN
+  registro_batallas.activo:= false;
+  seek(archivo_batallas,filesize(archivo_batallas) - 1);
+  write(archivo_batallas,registro_batallas);
+  writeln();
+  textcolor(lightgreen);
+  writeln('===========================================');
+  writeln('*** Registro dado de baja correctamente ***');
+  writeln('===========================================');
+  END;
+ END;
+
+PROCEDURE baja_informacion_batallas;
+VAR
+  titulo,opcion: string;
+  anio: integer;
+  BEGIN
+  reset(archivo_batallas);
+  IF verifica_estado_archivo_batallas() = true THEN
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('==============================================================');
+   writeln('X Aun no hay registros cargados en el archivo de batallas   X');
+   writeln('==============================================================');
+   close(archivo_batallas);
+   delay(3000);
+   END
+  ELSE
+   BEGIN
+   REPEAT
+   clrscr;
+   reset(archivo_batallas);
+   writeln('PARA DAR DE BAJA UN REGISTRO, INGRESE UN ANIO Y LUEGO SELECCIONE');
+   writeln('---------------------------------------------------------------');
+   anio:= valida_anio();
+   muestra_eventos_respecto_de_anio_batallas(anio);
+   textcolor(yellow);
+   writeln();
+   write('>>> Ingrese titulo del registro que quiere dar de baja: ');
+   readln(titulo);
+   selecciona_da_de_baja_batallas(titulo);
+   writeln('---------------------------------------------------------------');
+   REPEAT
+    textcolor(lightgreen);
+    write('>>> Desea volver a dar de baja otro registro[si/no]?: ');
+    readln(opcion);
+    IF (opcion <> 'si') AND (opcion <> 'no') THEN
+     BEGIN
+     textcolor(lightred);
+     writeln();
+     writeln('|////////////////////////////////////////|');
+     writeln('|Ingrese una respuesta valida. Por favor.|');
+     writeln('|////////////////////////////////////////|');
+     writeln();
+     END;
+    UNTIL (opcion = 'si') OR (opcion = 'no');
+   UNTIL (opcion = 'no');
+   close(archivo_batallas);
+   END;
+  END;
+
 PROCEDURE baja_informacion;
 VAR
   opcion: integer;
@@ -826,6 +920,8 @@ VAR
           baja_informacion_enciclopedia;
           END;
         2:BEGIN
+          clrscr;
+          baja_informacion_batallas;
           END;
         3:BEGIN
           END;
