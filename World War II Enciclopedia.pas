@@ -281,12 +281,8 @@ VAR
    END;
 
 FUNCTION verificar_estado_archivo_armas(): boolean;
-VAR
- f: boolean;
  BEGIN
  IF filesize(archivo_armas) = 0 THEN
-  f:= true;
- IF f = true THEN
   verificar_estado_archivo_armas:= true
  ELSE
   verificar_estado_archivo_armas:= false;
@@ -724,8 +720,6 @@ VAR
           END;
         5:BEGIN
           END;
-        6:BEGIN
-          END;
    END;
   UNTIL (opcion = 6);
   END;
@@ -928,8 +922,6 @@ VAR
         4:BEGIN
           END;
         5:BEGIN
-          END;
-        6:BEGIN
           END;
    END;
   UNTIL (opcion = 6);
@@ -1283,7 +1275,7 @@ VAR
  opcion: integer;
  BEGIN
  reset(archivo_armas);
- IF verificar_estado_archivo_armas() THEN
+ IF verificar_estado_archivo_armas = true THEN
   BEGIN
   textcolor(lightred);
   writeln();
