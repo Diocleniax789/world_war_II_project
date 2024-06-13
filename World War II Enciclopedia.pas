@@ -136,6 +136,50 @@ VAR
   END;
  END;
 
+FUNCTION verifica_estado_archivo_informacion(): boolean;
+ BEGIN
+ IF filesize(archivo_informacion) = 0 THEN
+  verifica_estado_archivo_informacion:= true
+ ELSE
+  verifica_estado_archivo_informacion:= false;
+ END;
+
+FUNCTION verifica_estado_archivo_batallas(): boolean;
+ BEGIN
+ reset(archivo_batallas);
+ IF filesize(archivo_batallas) = 0 THEN
+  verifica_estado_archivo_batallas:= true
+ ELSE
+  verifica_estado_archivo_batallas:= false;
+ close(archivo_batallas);
+ END;
+
+FUNCTION verificar_estado_archivo_lideres(): boolean;
+ BEGIN
+  reset(archivo_lideres);
+  IF filesize(archivo_lideres) = 0 THEN
+   verificar_estado_archivo_lideres:= true
+  ELSE
+   verificar_estado_archivo_lideres:= false;
+  close(archivo_lideres);
+ END;
+
+FUNCTION verificar_estado_archivo_armas(): boolean;
+ BEGIN
+ IF filesize(archivo_armas) = 0 THEN
+  verificar_estado_archivo_armas:= true
+ ELSE
+  verificar_estado_archivo_armas:= false;
+ END;
+
+FUNCTION verificar_estado_archivo_wunderwaffe(): boolean;
+ BEGIN
+ IF filesize(archivo_wunderwaffe) = 0 THEN
+  verificar_estado_archivo_wunderwaffe:= true
+ ELSE
+  verificar_estado_archivo_wunderwaffe:= false;
+ END;
+
 PROCEDURE carga_crea_enciclopedia;
 VAR
  opcion: string;
@@ -280,14 +324,6 @@ VAR
    close(archivo_lideres);
    END;
 
-FUNCTION verificar_estado_archivo_armas(): boolean;
- BEGIN
- IF filesize(archivo_armas) = 0 THEN
-  verificar_estado_archivo_armas:= true
- ELSE
-  verificar_estado_archivo_armas:= false;
- END;
-
 FUNCTION existe_arma(arma: string): boolean;
 VAR
  f: boolean;
@@ -397,14 +433,6 @@ VAR
   UNTIL (opcion = 'si') OR (opcion = 'no');
  UNTIL (opcion = 'no');
  close(archivo_armas);
- END;
-
-FUNCTION verificar_estado_archivo_wunderwaffe(): boolean;
- BEGIN
- IF filesize(archivo_wunderwaffe) = 0 THEN
-  verificar_estado_archivo_wunderwaffe:= true
- ELSE
-  verificar_estado_archivo_wunderwaffe:= false;
  END;
 
 FUNCTION existe_arma_wunderwaffe(nombre_arma: string): boolean;
@@ -578,14 +606,6 @@ VAR
   UNTIL (opcion = 6);
   END;
 
-FUNCTION verifica_estado_archivo_informacion(): boolean;
- BEGIN
- IF filesize(archivo_informacion) = 0 THEN
-  verifica_estado_archivo_informacion:= true
- ELSE
-  verifica_estado_archivo_informacion:= false;
- END;
-
 PROCEDURE muestra_eventos_respecto_de_anio(anio: integer);
  BEGIN
  WHILE NOT eof(archivo_informacion) DO
@@ -682,30 +702,20 @@ VAR
   END;
  END;
 
-FUNCTION verifica_estado_archivo_batallas(): boolean;
- BEGIN
- reset(archivo_batallas);
- IF filesize(archivo_batallas) = 0 THEN
-  verifica_estado_archivo_batallas:= true
- ELSE
-  verifica_estado_archivo_batallas:= false;
- close(archivo_batallas);
- END;
-
 PROCEDURE Modifica_informacion;
 VAR
   opcion: integer;
   BEGIN
   REPEAT
    writeln('1. Modificar enciclopedia de la Segunda Guerra Mundial');
-   writeln('2. Modificar sobre las batallas iconicas');
-   writeln('3. Modificar sobre los lideres');
-   writeln('4. Modificar sobre las armas');
-   writeln('5. Modificar archivo de las Wanderwaffe');
+   writeln('2. Modificar sobre las batallas iconicas (PROXIMAMENTE)');
+   writeln('3. Modificar sobre los lideres (PROXIMAMENTE)');
+   writeln('4. Modificar sobre las armas (PROXIMAMENTE)');
+   writeln('5. Modificar archivo de las Wanderwaffe (PROXIMAMENTE)');
    writeln('6. Regresar al menu del desarollador.');
    writeln();
    writeln('-----------------------------------------------------------');
-   write('Seleccione una opcion(teclas 1 al 7): ');
+   write('Seleccione una opcion(teclas 1 al 6): ');
    readln(opcion);
    CASE opcion OF
         1:BEGIN
@@ -900,13 +910,13 @@ VAR
    clrscr;
    writeln('1. Baja informacion de la enciclopedia de la Segunda Guerra Mundial');
    writeln('2. Baja sobre las batallas iconicas');
-   writeln('3. Baja sobre los lideres');
-   writeln('4. Baja sobre las armas');
-   writeln('5. Baja archivo de las Wanderwaffe');
+   writeln('3. Baja sobre los lideres (PROXIMAMENTE)');
+   writeln('4. Baja sobre las armas (PROXIMAMENTE)');
+   writeln('5. Baja archivo de las Wanderwaffe (PROXIMAMENTE)');
    writeln('6. Regresar al menu del desarollador.');
    writeln();
    writeln('-----------------------------------------------------------');
-   write('Seleccione una opcion(teclas 1 al 7): ');
+   write('Seleccione una opcion(teclas 1 al 6): ');
    readln(opcion);
    CASE opcion OF
         1:BEGIN
@@ -1143,16 +1153,6 @@ VAR
    UNTIL (opcion = 'no');
    close(archivo_batallas);
   END;
- END;
-
-FUNCTION verificar_estado_archivo_lideres(): boolean;
- BEGIN
-  reset(archivo_lideres);
-  IF filesize(archivo_lideres) = 0 THEN
-   verificar_estado_archivo_lideres:= true
-  ELSE
-   verificar_estado_archivo_lideres:= false;
-  close(archivo_lideres);
  END;
 
 FUNCTION busca_lider(lider: string): boolean;
