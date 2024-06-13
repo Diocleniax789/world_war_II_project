@@ -1249,6 +1249,91 @@ VAR
   END;
  END;
 
+PROCEDURE busca_muestra_arma(clase: string);
+ BEGIN
+ writeln('///////////////////////////////////////ARMAS/////////////////////////////////////////');
+ writeln('=====================================================================================');
+ writeln();
+ WHILE NOT eof(archivo_armas) DO
+  BEGIN
+  read(archivo_armas,registro_armas);
+  IF clase = registro_armas.clase_arma THEN
+   BEGIN
+    writeln('NOMBRE DEL ARMA: ',registro_armas.nombre_arma);
+    writeln();
+    writeln('CLASE DE ARMA: ',registro_armas.clase_arma);
+    writeln();
+    writeln('PAIS DE ORIGEN: ',registro_armas.pais_de_origen);
+    writeln();
+    writeln('INFORMACION: ',registro_armas.info_arma);
+    writeln();
+    writeln('==================================================================================');
+    writeln('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.');
+    writeln('==================================================================================');
+    writeln();
+   END;
+   writeln('Pulse enter para salir...');
+   readln();
+  END;
+ END;
+
+PROCEDURE ver_arma;
+VAR
+ clase: string;
+ opcion: integer;
+ BEGIN
+ reset(archivo_armas);
+ IF verificar_estado_archivo_armas() THEN
+  BEGIN
+  textcolor(lightred);
+  writeln();
+  writeln('========================================================');
+  writeln('X Aun no hay registros cargados en el archivo de armas X');
+  writeln('========================================================');
+  close(archivo_armas);
+  delay(3000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  clrscr;
+  reset(archivo_armas);
+  writeln('1. Avion');
+  writeln('2. Infanteria');
+  writeln('3. Naval');
+  writeln('4. Tanques');
+  writeln('5. Volver al menu principal');
+  writeln();
+  writeln('---------------------------------------------');
+  write('Seleccione clase de arma(tecla 1 a 5): ');
+  readln(opcion);
+  CASE opcion OF
+       1:BEGIN
+         clrscr;
+         clase:= 'Avion';
+         busca_muestra_arma(clase);
+         END;
+       2:BEGIN
+         clrscr;
+         clase:= 'Infanteria';
+         busca_muestra_arma(clase);
+         END;
+       3:BEGIN
+         clrscr;
+         clase:= 'Naval';
+         busca_muestra_arma(clase);
+         END;
+       4:BEGIN
+         clrscr;
+         clase:= 'Tanques';
+         busca_muestra_arma(clase);
+         END;
+  END;
+  close(archivo_armas);
+  UNTIL (opcion = 5);
+ END;
+ END;
+
 FUNCTION color_imagen():integer;
 VAR
  i:integer;
@@ -1852,6 +1937,8 @@ VAR
           ver_lideres;
           END;
         4:BEGIN
+          clrscr;
+          ver_arma;
           END;
         5:BEGIN
           clrscr;
