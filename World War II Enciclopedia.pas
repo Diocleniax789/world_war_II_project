@@ -702,13 +702,102 @@ VAR
   END;
  END;
 
+PROCEDURE muestra_eventos_respecto_de_anio_batallas1(anio: integer);
+ BEGIN
+ WHILE NOT eof(archivo_batallas) DO
+  BEGIN
+  read(archivo_batallas,registro_batallas);
+  IF anio = registro_batallas.anio THEN
+   BEGIN
+   writeln('------------------------------------------------------------');
+   writeln();
+   writeln('Titulo: ',registro_batallas.titulo);
+   writeln();
+   writeln('Texto: ',registro_batallas.texto);
+   writeln();
+   writeln('Bandos enfrentados: ',registro_batallas.victoria);
+   writeln();
+   writeln('------------------------------------------------------------');
+   END;
+   END;
+ END;
+
+PROCEDURE busca_batalla(titulo: string);
+VAR
+  f: boolean;
+  BEGIN
+  REPEAT
+  seek(archivo_batallas,filesize(archivo_batallas) - 1);
+  read(archivo_batallas,registro_batallas);
+  IF titulo = registro_batallas.titulo THEN
+   f:= true;
+  UNTIL eof(archivo_batallas) OR (f = true);
+  IF f = true THEN
+   BEGIN
+   writeln();
+   write('>>> Ingrese la nueva modificacion: ');
+   readln(registro_batallas.texto);
+   seek(archivo_batallas,filesize(archivo_batallas) - 1);
+   write(archivo_batallas,registro_batallas);
+   writeln();
+   textcolor(lightgreen);
+   writeln('=========================================');
+   writeln('*** Registro modificado correctamente ***');
+   writeln('=========================================');
+   END;
+ END;
+
+PROCEDURE modificar_batallas_iconicas;
+VAR
+ opcion,titulo: string;
+ anio: integer;
+ BEGIN
+ IF verifica_estado_archivo_batallas = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln('=============================================');
+  writeln('X El archivo de batallas se encuentra vacio X');
+  writeln('=============================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+   clrscr;
+   reset(archivo_batallas);
+   anio:= valida_anio;
+   muestra_eventos_respecto_de_anio_batallas1(anio);
+   writeln('=======================================================================================');
+   write('Elija el titulo del registro que desee modificar: ');
+   readln(titulo);
+   busca_batalla(titulo);
+   close(archivo_batallas);
+   REPEAT
+   writeln('============================================');
+   write('Desea volver a modificar otro registro[s/n]?: ');
+   readln(opcion);
+   IF (opcion <> 's') AND (opcion <> 'n') THEN
+    BEGIN
+    textcolor(lightred);
+    writeln();
+    writeln('===================================================');
+    writeln('X Ingrese una opcion coherente. Vuelva a intentar X');
+    writeln('===================================================');
+    END;
+   UNTIL (opcion = 's') OR (opcion = 'n');
+  UNTIL (opcion = 'n');
+  END;
+ END;
+
 PROCEDURE Modifica_informacion;
 VAR
   opcion: integer;
   BEGIN
   REPEAT
+   clrscr;
+   textcolor(green);
    writeln('1. Modificar enciclopedia de la Segunda Guerra Mundial');
-   writeln('2. Modificar sobre las batallas iconicas (PROXIMAMENTE)');
+   writeln('2. Modificar sobre las batallas iconicas');
    writeln('3. Modificar sobre los lideres (PROXIMAMENTE)');
    writeln('4. Modificar sobre las armas (PROXIMAMENTE)');
    writeln('5. Modificar archivo de las Wanderwaffe (PROXIMAMENTE)');
@@ -723,6 +812,8 @@ VAR
           modificar_informacion_enciclopedia;
           END;
         2:BEGIN
+          clrscr;
+          modificar_batallas_iconicas;
           END;
         3:BEGIN
           END;
